@@ -1,0 +1,29 @@
+specVersion: 0.0.4
+description: Semaphore boilerplate subgraph definition (The Graph).
+repository: https://github.com/semaphore-protocol/boilerplate
+schema:
+    file: ./schema.graphql
+dataSources:
+    - kind: ethereum/contract
+      name: Feedback
+      network: goerli
+      source:
+          address: "0xAb14469cE3Be7aEAA8C2515aDE2F43cd949bcCb2"
+          abi: Feedback
+          startBlock: 8054146
+      mapping:
+          kind: ethereum/events
+          apiVersion: 0.0.6
+          language: wasm/assemblyscript
+          entities:
+              - User
+              - Feeback
+          abis:
+              - name: Feedback
+                file: ./contract-artifacts/Feedback.json
+          eventHandlers:
+              - event: NewUser(uint256,bytes32)
+                handler: createUser
+              - event: NewFeedback(string)
+                handler: createFeedback
+          file: ./src/mapping.ts
