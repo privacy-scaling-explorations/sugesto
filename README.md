@@ -1,17 +1,12 @@
 <p align="center">
     <h1 align="center">
-        <picture>
-            <source media="(prefers-color-scheme: dark)" srcset="https://github.com/semaphore-protocol/website/blob/main/static/img/semaphore-icon-dark.svg">
-            <source media="(prefers-color-scheme: light)" srcset="https://github.com/semaphore-protocol/website/blob/main/static/img/semaphore-icon.svg">
-            <img width="40" alt="Semaphore icon." src="https://github.com/semaphore-protocol/website/blob/main/static/img/semaphore-icon.svg">
-        </picture>
-        Semaphore Boilerplate
+        PSE Sugesto
     </h1>
 </p>
 
 <p align="center">
     <a href="https://github.com/semaphore-protocol" target="_blank">
-        <img src="https://img.shields.io/badge/project-Semaphore-blue.svg?style=flat-square">
+        <img src="https://img.shields.io/badge/project-PSE-blue.svg?style=flat-square">
     </a>
     <a href="https://github.com/semaphore-protocol/boilerplate/blob/main/LICENSE">
         <img alt="Github license" src="https://img.shields.io/github/license/semaphore-protocol/boilerplate.svg?style=flat-square">
@@ -27,23 +22,21 @@
     </a>
 </p>
 
-| The repository is divided into three components: [web app](./apps/web-app), [contracts](./apps/contracts) and [subgraph](./apps/subgraph). The app allows users to create their own Semaphore identity, join a group with their usernames and then send their feedback anonymously (currently on Goerli). |
-| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Sugesto is a simple DApp based on Semaphore that can be used to send anonymous feedback in our internal projects/events (currently on Goerli). |
+| ---------------------------------------------------------------------------------------------------------------------------------------------- |
 
 ## 🛠 Install
 
-Use this repository as a Github [template](https://github.com/semaphore-protocol/boilerplate/generate).
-
-Clone your repository:
+Clone this repository:
 
 ```bash
-git clone https://github.com/<your-username>/<your-repo>.git
+git clone https://github.com/privacy-scaling-explorations/sugesto.git
 ```
 
 and install the dependencies:
 
 ```bash
-cd <your-repo> && yarn
+cd sugesto && yarn
 ```
 
 ## 📜 Usage
@@ -58,7 +51,40 @@ and add your environment variables.
 
 ℹ️ You should at least set a valid Ethereum URL (e.g. Infura) and a private key with some ethers.
 
+### Deploy the contract
+
+1. Go to the `apps/contracts` directory and deploy your contract:
+
+```bash
+yarn deploy --semaphore <semaphore-address> --group <group-id> --network goerli
+```
+
+2. Update your `.env` file with your new contract address and group id.
+
+> **Note**  
+> Check the Semaphore contract addresses [here](https://semaphore.appliedzkp.org/docs/deployed-contracts#semaphore).
+
+> **Warning**  
+> The group id is a number!
+
+### Deploy the subgraph
+
+1. Go to the `apps/subgraph` directory and update the `subgraph.yaml` file by setting your contract address.
+2. Authenticate the account with your access token:
+
+```bash
+yarn auth <access-token>
+```
+
+3. Deploy your subgraph:
+
+```bash
+yarn deploy <subgraph-name>
+```
+
 ### Start the app
+
+You can start your app locally or you can easily deploy it to Vercel or AWS Amplify.
 
 ```bash
 yarn start:web-app
