@@ -11,8 +11,8 @@
     <a href="https://github.com/semaphore-protocol/boilerplate/blob/main/LICENSE">
         <img alt="Github license" src="https://img.shields.io/github/license/semaphore-protocol/boilerplate.svg?style=flat-square">
     </a>
-    <a href="https://github.com/semaphore-protocol/semaphore.js/actions?query=workflow%3Astyle">
-        <img alt="GitHub Workflow style" src="https://img.shields.io/github/workflow/status/semaphore-protocol/semaphore.js/style?label=style&style=flat-square&logo=github">
+    <a href="https://github.com/semaphore-protocol/boilerplate/sugesto/actions?query=workflow%3Astyle">
+        <img alt="GitHub Workflow style" src="https://img.shields.io/github/workflow/status/semaphore-protocol/boilerplate/sugesto/style?label=style&style=flat-square&logo=github">
     </a>
     <a href="https://eslint.org/">
         <img alt="Linter eslint" src="https://img.shields.io/badge/linter-eslint-8080f2?style=flat-square&logo=eslint">
@@ -49,7 +49,8 @@ cp .env.example .env
 
 and add your environment variables.
 
-ℹ️ You should at least set a valid Ethereum URL (e.g. Infura) and a private key with some ethers.
+> **Note**  
+> You should at least set a valid Ethereum URL (e.g. Infura) and a private key with some ethers.
 
 ### Deploy the contract
 
@@ -87,7 +88,7 @@ yarn deploy <subgraph-name>
 You can start your app locally or you can easily deploy it to Vercel or AWS Amplify.
 
 ```bash
-yarn start:web-app
+yarn start
 ```
 
 ### Code quality and formatting
