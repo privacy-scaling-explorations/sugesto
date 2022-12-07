@@ -1,10 +1,10 @@
 {
-    "name": "semaphore-boilerplate",
-    "description": "A simple DApp to use as a starting point for your project.",
+    "name": "sugesto",
+    "description": "Anonymous feedback for PSE activities.",
     "license": "MIT",
-    "repository": "git@github.com:semaphore-protocol/boilerplate.git",
-    "homepage": "https://github.com/semaphore-protocol/boilerplate",
-    "bugs": "https://github.com/semaphore-protocol/boilerplate/issues",
+    "repository": "git@github.com:privacy-scaling-explorations/sugesto.git",
+    "homepage": "https://github.com/privacy-scaling-explorations/sugesto",
+    "bugs": "https://github.com/privacy-scaling-explorations/sugesto/issues",
     "private": true,
     "scripts": {
         "start": "yarn workspace web-app dev",
@@ -20,7 +20,7 @@
         "monorepo",
         "zero-knowledge",
         "semaphore",
-        "boilerplate"
+        "sugesto"
     ],
     "workspaces": [
         "apps/*"

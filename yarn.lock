@@ -19270,29 +19270,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semaphore-boilerplate@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "semaphore-boilerplate@workspace:."
-  dependencies:
-    "@commitlint/cli": ^17.3.0
-    "@commitlint/config-conventional": ^17.3.0
-    "@types/node": ^17.0.9
-    "@typescript-eslint/eslint-plugin": ^5.9.1
-    "@typescript-eslint/parser": ^5.9.1
-    commitizen: ^4.2.6
-    cz-conventional-changelog: ^3.3.0
-    eslint: ^8.2.0
-    eslint-config-airbnb-base: 15.0.0
-    eslint-config-airbnb-typescript: ^16.1.0
-    eslint-config-prettier: ^8.3.0
-    eslint-plugin-import: ^2.25.2
-    lint-staged: ^13.1.0
-    prettier: ^2.5.1
-    ts-node: ^10.8.1
-    typescript: ^4.7.3
-  languageName: unknown
-  linkType: soft
-
 "semaphore@npm:>=1.0.1, semaphore@npm:^1.0.3, semaphore@npm:^1.1.0":
   version: 1.1.0
   resolution: "semaphore@npm:1.1.0"
@@ -20472,6 +20449,29 @@ __metadata:
     "@graphprotocol/graph-cli": ^0.33.1
     "@graphprotocol/graph-ts": ^0.27.0
     mustache: ^4.2.0
+  languageName: unknown
+  linkType: soft
+
+"sugesto@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "sugesto@workspace:."
+  dependencies:
+    "@commitlint/cli": ^17.3.0
+    "@commitlint/config-conventional": ^17.3.0
+    "@types/node": ^17.0.9
+    "@typescript-eslint/eslint-plugin": ^5.9.1
+    "@typescript-eslint/parser": ^5.9.1
+    commitizen: ^4.2.6
+    cz-conventional-changelog: ^3.3.0
+    eslint: ^8.2.0
+    eslint-config-airbnb-base: 15.0.0
+    eslint-config-airbnb-typescript: ^16.1.0
+    eslint-config-prettier: ^8.3.0
+    eslint-plugin-import: ^2.25.2
+    lint-staged: ^13.1.0
+    prettier: ^2.5.1
+    ts-node: ^10.8.1
+    typescript: ^4.7.3
   languageName: unknown
   linkType: soft
 
