@@ -12,6 +12,7 @@
         "test:report-gas": "REPORT_GAS=true hardhat test",
         "test:coverage": "hardhat coverage",
         "typechain": "hardhat typechain",
+        "network": "hardhat node",
         "lint": "solhint 'contracts/**/*.sol'"
     },
     "devDependencies": {
