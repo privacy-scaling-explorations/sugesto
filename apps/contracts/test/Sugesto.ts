@@ -76,7 +76,9 @@ describe("Sugesto", () => {
         it("Should allow users to send feedback anonymously", async () => {
             const feedback = "Hello world"
             const member = new Identity()
+
             addMemberToGroup(member)
+
             const transaction = createFeedbackTransaction({ feedback, feedbackNumber: 1, member })
 
             await expect(transaction).to.emit(sugesto, "NewFeedback").withArgs(feedback)
@@ -85,32 +87,57 @@ describe("Sugesto", () => {
         it("Should fail if the user submit multiple feedback with same feedbackNumber", async () => {
             const feedback = "Hello world"
             const member = new Identity()
-            addMemberToGroup(member)
-            const transaction = createFeedbackTransaction({ feedback, feedbackNumber: 1, member })
-            await expect(transaction).to.emit(sugesto, "NewFeedback").withArgs(feedback)
 
+            addMemberToGroup(member)
+
+            const transaction = createFeedbackTransaction({ feedback, feedbackNumber: 1, member })
             const transaction2 = createFeedbackTransaction({ feedback: "Hi", feedbackNumber: 1, member })
+
+            await expect(transaction).to.emit(sugesto, "NewFeedback").withArgs(feedback)
             await expect(transaction2).to.be.revertedWith("ZKGroupsSemaphore__YouAreUsingTheSameNullifierTwice")
         })
 
         it("Should fail if the feedback number exceed the limit", async () => {
             const feedback = "Hello world"
             const member = new Identity()
+
             addMemberToGroup(member)
+
             const transaction = createFeedbackTransaction({ feedback, feedbackNumber: 4, member })
 
             await expect(transaction).to.be.revertedWith("Sugesto__FeedbackLimitExceeded")
         })
 
         it("Should fail if the group is not part of ZK groups", async () => {
-            const group2 = new Group(10, 20)
+            const feedback = "Hello world"
             const member = new Identity()
+            const group2 = new Group(10, 20)
+
             group2.addMembers([member.commitment])
 
-            const feedback = "Hello world"
             const transaction = createFeedbackTransaction({ feedback, feedbackNumber: 1, group: group2, member })
 
             await expect(transaction).to.be.revertedWith("Semaphore__InvalidProof")
+        })
+    })
+
+    describe("# blacklistFeedback", () => {
+        const feedback = "Fuck the system"
+
+        before(async () => {
+            const member = new Identity()
+
+            addMemberToGroup(member)
+
+            await createFeedbackTransaction({ feedback, feedbackNumber: 1, member })
+        })
+
+        it("Should blacklist hateful feedback messages", async () => {
+            const feedbackHash = solidityKeccak256(["string"], [feedback])
+
+            const transaction = sugesto.blacklistFeedback([feedbackHash])
+
+            await expect(transaction).to.emit(sugesto, "BlacklistedFeedback").withArgs([feedbackHash])
         })
     })
 })

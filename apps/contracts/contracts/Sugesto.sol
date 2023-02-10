@@ -2,12 +2,14 @@
 pragma solidity ^0.8.4;
 
 import "@zk-groups/contracts/protocols/IZKGroupsSemaphore.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "hardhat/console.sol";
 
-contract Sugesto {
+contract Sugesto is Ownable {
     error Sugesto__FeedbackLimitExceeded();
 
     event NewFeedback(string feedback);
+    event BlacklistedFeedback(uint256[] feedbackHashes);
 
     uint8 constant FEEDBACK_LIMIT = 3;
 
@@ -39,5 +41,9 @@ contract Sugesto {
         );
 
         emit NewFeedback(feedback);
+    }
+
+    function blacklistFeedback(uint256[] calldata feedbackHashes) external onlyOwner {
+        emit BlacklistedFeedback(feedbackHashes);
     }
 }
