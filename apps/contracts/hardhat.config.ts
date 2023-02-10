@@ -1,7 +1,7 @@
 import "@nomiclabs/hardhat-ethers"
 import "@nomiclabs/hardhat-waffle"
-import "@semaphore-protocol/hardhat"
 import "@typechain/hardhat"
+import "@zk-groups/hardhat"
 import { config as dotenvConfig } from "dotenv"
 import "hardhat-gas-reporter"
 import { HardhatUserConfig } from "hardhat/config"
