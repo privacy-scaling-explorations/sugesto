@@ -48,8 +48,5 @@
         "commitizen": {
             "path": "./node_modules/cz-conventional-changelog"
         }
-    },
-    "dependencies": {
-        "@zk-groups/contracts": "0.1.1"
     }
 }
