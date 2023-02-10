@@ -17,8 +17,13 @@ describe("Sugesto", () => {
     const group = new Group(groupId, merkleTreeDepth)
 
     // Helpers
-    async function createFeedbackTransaction(params: { feedback: string, feedbackNumber: number, member: Identity, group?: Group }) {
-        const { feedback, feedbackNumber, member, group: _group = group } = params;
+    async function createFeedbackTransaction(params: {
+        feedback: string
+        feedbackNumber: number
+        member: Identity
+        group?: Group
+    }) {
+        const { feedback, feedbackNumber, member, group: _group = group } = params
 
         const wasmFilePath = `${config.paths.build["snark-artifacts"]}/semaphore.wasm`
         const zkeyFilePath = `${config.paths.build["snark-artifacts"]}/semaphore.zkey`
@@ -43,7 +48,7 @@ describe("Sugesto", () => {
     }
 
     async function addMemberToGroup(member: Identity) {
-        group.addMembers([member.commitment]);
+        group.addMembers([member.commitment])
 
         const zkGroupsSemaphoreAddress = await sugesto.zkGroupsSemaphore()
         const zkGroupsSemaphore = await ethers.getContractAt("ZKGroupsSemaphore", zkGroupsSemaphoreAddress)
@@ -69,8 +74,8 @@ describe("Sugesto", () => {
 
     describe("# sendFeedback", () => {
         it("Should allow users to send feedback anonymously", async () => {
-            const feedback = "Hello world";
-            const member = new Identity();
+            const feedback = "Hello world"
+            const member = new Identity()
             addMemberToGroup(member)
             const transaction = createFeedbackTransaction({ feedback, feedbackNumber: 1, member })
 
@@ -78,19 +83,19 @@ describe("Sugesto", () => {
         })
 
         it("Should fail if the user submit multiple feedback with same feedbackNumber", async () => {
-            const feedback = "Hello world";
-            const member = new Identity();
+            const feedback = "Hello world"
+            const member = new Identity()
             addMemberToGroup(member)
             const transaction = createFeedbackTransaction({ feedback, feedbackNumber: 1, member })
             await expect(transaction).to.emit(sugesto, "NewFeedback").withArgs(feedback)
 
-            const transaction2 = createFeedbackTransaction({ feedback: 'Hi', feedbackNumber: 1, member })
+            const transaction2 = createFeedbackTransaction({ feedback: "Hi", feedbackNumber: 1, member })
             await expect(transaction2).to.be.revertedWith("ZKGroupsSemaphore__YouAreUsingTheSameNullifierTwice")
         })
 
         it("Should fail if the feedback number exceed the limit", async () => {
-            const feedback = "Hello world";
-            const member = new Identity();
+            const feedback = "Hello world"
+            const member = new Identity()
             addMemberToGroup(member)
             const transaction = createFeedbackTransaction({ feedback, feedbackNumber: 4, member })
 
@@ -99,10 +104,10 @@ describe("Sugesto", () => {
 
         it("Should fail if the group is not part of ZK groups", async () => {
             const group2 = new Group(10, 20)
-            const member = new Identity();
+            const member = new Identity()
             group2.addMembers([member.commitment])
 
-            const feedback = "Hello world";
+            const feedback = "Hello world"
             const transaction = createFeedbackTransaction({ feedback, feedbackNumber: 1, group: group2, member })
 
             await expect(transaction).to.be.revertedWith("Semaphore__InvalidProof")
