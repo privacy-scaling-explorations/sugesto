@@ -15,12 +15,35 @@ describe("Sugesto", () => {
     const merkleTreeDepth = 20
 
     const group = new Group(groupId, merkleTreeDepth)
-    const members = [new Identity(), new Identity(), new Identity()]
 
-    before(async () => {
-        sugesto = await run("deploy", { logs: false, group: groupId })
+    // Helpers
+    async function createFeedbackTransaction(params: { feedback: string, feedbackNumber: number, member: Identity, group?: Group }) {
+        const { feedback, feedbackNumber, member, group: _group = group } = params;
 
-        group.addMembers(members.map(({ commitment }) => commitment))
+        const wasmFilePath = `${config.paths.build["snark-artifacts"]}/semaphore.wasm`
+        const zkeyFilePath = `${config.paths.build["snark-artifacts"]}/semaphore.zkey`
+
+        const feedbackHash = solidityKeccak256(["string"], [feedback])
+
+        const fullProof = await generateProof(member, _group, feedbackNumber, feedbackHash, {
+            wasmFilePath,
+            zkeyFilePath
+        })
+
+        const transaction = sugesto.sendFeedback(
+            groupId,
+            merkleTreeDepth,
+            feedback,
+            feedbackNumber,
+            fullProof.nullifierHash,
+            fullProof.proof
+        )
+
+        return transaction
+    }
+
+    async function addMemberToGroup(member: Identity) {
+        group.addMembers([member.commitment]);
 
         const zkGroupsSemaphoreAddress = await sugesto.zkGroupsSemaphore()
         const zkGroupsSemaphore = await ethers.getContractAt("ZKGroupsSemaphore", zkGroupsSemaphoreAddress)
@@ -38,32 +61,51 @@ describe("Sugesto", () => {
         const fingerprint = await zkGroups.groups(groupId)
 
         expect(group.root.toString()).eq(fingerprint.toString())
+    }
+
+    before(async () => {
+        sugesto = await run("deploy", { logs: false, group: groupId })
     })
 
     describe("# sendFeedback", () => {
-        const wasmFilePath = `${config.paths.build["snark-artifacts"]}/semaphore.wasm`
-        const zkeyFilePath = `${config.paths.build["snark-artifacts"]}/semaphore.zkey`
-
         it("Should allow users to send feedback anonymously", async () => {
-            const feedback = "Hello World"
-            const feedbackHash = solidityKeccak256(["string"], [feedback])
-            const feedbackNumber = 1
-
-            const fullProof = await generateProof(members[1], group, feedbackNumber, feedbackHash, {
-                wasmFilePath,
-                zkeyFilePath
-            })
-
-            const transaction = sugesto.sendFeedback(
-                groupId,
-                merkleTreeDepth,
-                feedback,
-                feedbackNumber,
-                fullProof.nullifierHash,
-                fullProof.proof
-            )
+            const feedback = "Hello world";
+            const member = new Identity();
+            addMemberToGroup(member)
+            const transaction = createFeedbackTransaction({ feedback, feedbackNumber: 1, member })
 
             await expect(transaction).to.emit(sugesto, "NewFeedback").withArgs(feedback)
+        })
+
+        it("Should fail if the user submit multiple feedback with same feedbackNumber", async () => {
+            const feedback = "Hello world";
+            const member = new Identity();
+            addMemberToGroup(member)
+            const transaction = createFeedbackTransaction({ feedback, feedbackNumber: 1, member })
+            await expect(transaction).to.emit(sugesto, "NewFeedback").withArgs(feedback)
+
+            const transaction2 = createFeedbackTransaction({ feedback: 'Hi', feedbackNumber: 1, member })
+            await expect(transaction2).to.be.revertedWith("ZKGroupsSemaphore__YouAreUsingTheSameNullifierTwice")
+        })
+
+        it("Should fail if the feedback number exceed the limit", async () => {
+            const feedback = "Hello world";
+            const member = new Identity();
+            addMemberToGroup(member)
+            const transaction = createFeedbackTransaction({ feedback, feedbackNumber: 4, member })
+
+            await expect(transaction).to.be.revertedWith("Sugesto__FeedbackLimitExceeded")
+        })
+
+        it("Should fail if the group is not part of ZK groups", async () => {
+            const group2 = new Group(10, 20)
+            const member = new Identity();
+            group2.addMembers([member.commitment])
+
+            const feedback = "Hello world";
+            const transaction = createFeedbackTransaction({ feedback, feedbackNumber: 1, group: group2, member })
+
+            await expect(transaction).to.be.revertedWith("Semaphore__InvalidProof")
         })
     })
 })
