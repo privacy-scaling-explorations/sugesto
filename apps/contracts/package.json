@@ -41,7 +41,7 @@
         "typechain": "^8.0.0"
     },
     "dependencies": {
-        "@semaphore-protocol/contracts": "2.5.0"
+        "@zk-groups/hardhat": "^0.1.1"
     },
     "config": {
         "solidity": {

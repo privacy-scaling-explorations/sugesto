@@ -1,39 +1,34 @@
 import { task, types } from "hardhat/config"
 
-task("deploy", "Deploy a Feedback contract")
-    .addOptionalParam("semaphore", "Semaphore contract address", undefined, types.string)
+task("deploy", "Deploy Sugesto contract")
+    .addOptionalParam("zkGroupsSemaphoreAddress", "Zk-Groups Semaphore contract address", undefined, types.string)
     .addOptionalParam("group", "Group identifier", undefined, types.int)
     .addOptionalParam("logs", "Print the logs", true, types.boolean)
-    .setAction(async ({ logs, semaphore: semaphoreAddress, group: groupId }, { ethers, run }) => {
-        if (!semaphoreAddress) {
-            const { address: verifierAddress } = await run("deploy:verifier", { logs, merkleTreeDepth: 20 })
+    .setAction(async ({ logs, zkGroups: zkGroupsSemaphoreAddress, group: groupId }, { ethers, run }) => {
+        if (!zkGroupsSemaphoreAddress) {
+            const { address: zkGroupsAddress } = await run("deploy:zk-groups", {})
 
-            const { address } = await run("deploy:semaphore", {
+            const { address } = await run("deploy:zk-groups-semaphore", {
                 logs,
-                verifiers: [
-                    {
-                        merkleTreeDepth: 20,
-                        contractAddress: verifierAddress
-                    }
-                ]
+                zkGroupsAddress,
             })
 
-            semaphoreAddress = address
+            zkGroupsSemaphoreAddress = address
         }
 
         if (!groupId) {
             groupId = process.env.GROUP_ID
         }
 
-        const FeedbackFactory = await ethers.getContractFactory("Feedback")
+        const SugestoFactory = await ethers.getContractFactory("Sugesto")
 
-        const feedbackContract = await FeedbackFactory.deploy(semaphoreAddress, groupId)
+        const sugestoContract = await SugestoFactory.deploy(zkGroupsSemaphoreAddress)
 
-        await feedbackContract.deployed()
+        await sugestoContract.deployed()
 
         if (logs) {
-            console.info(`Feedback contract has been deployed to: ${feedbackContract.address}`)
+            console.info(`Feedback contract has been deployed to: ${sugestoContract.address}`)
         }
 
-        return feedbackContract
+        return sugestoContract
     })
