@@ -5,7 +5,7 @@ import { expect } from "chai"
 import { solidityKeccak256 } from "ethers/lib/utils"
 import { ethers, run } from "hardhat"
 // @ts-ignore: typechain folder will be generated after contracts compilation
-import { Sugesto, ZKGroups } from "../build/typechain"
+import { Sugesto } from "../build/typechain"
 import { config } from "../package.json"
 
 describe("Sugesto", () => {
