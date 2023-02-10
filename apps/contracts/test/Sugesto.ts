@@ -1,43 +1,43 @@
 import { Group } from "@semaphore-protocol/group"
 import { Identity } from "@semaphore-protocol/identity"
-import { generateProof, packToSolidityProof } from "@semaphore-protocol/proof"
+import { generateProof } from "@semaphore-protocol/proof"
 import { expect } from "chai"
 import { solidityKeccak256 } from "ethers/lib/utils"
-import { run, ethers } from "hardhat"
-import { Sugesto, ZKGroups, ZKGroupsSemaphore } from "../build/typechain"
+import { ethers, run } from "hardhat"
+// @ts-ignore: typechain folder will be generated after contracts compilation
+import { Sugesto, ZKGroups } from "../build/typechain"
 import { config } from "../package.json"
 
 describe("Sugesto", () => {
-    let sugestoContract: Sugesto
+    let sugesto: Sugesto
 
-    const users: any = []
     const groupId = 42
     const merkleTreeDepth = 20
-    const group = new Group(merkleTreeDepth)
+
+    const group = new Group(groupId, merkleTreeDepth)
+    const members = [new Identity(), new Identity(), new Identity()]
 
     before(async () => {
-        sugestoContract = await run("deploy", { logs: false, group: groupId })
+        sugesto = await run("deploy", { logs: false, group: groupId })
 
-        users.push({
-            identity: new Identity(),
-        })
+        group.addMembers(members.map(({ commitment }) => commitment))
 
-        users.push({
-            identity: new Identity(),
-        })
+        const zkGroupsSemaphoreAddress = await sugesto.zkGroupsSemaphore()
+        const zkGroupsSemaphore = await ethers.getContractAt("ZKGroupsSemaphore", zkGroupsSemaphoreAddress)
 
-        group.addMember(users[0].identity.generateCommitment())
-        group.addMember(users[1].identity.generateCommitment())
+        const zkGroupsAddress = await zkGroupsSemaphore.zkGroups()
+        const zkGroups = await ethers.getContractAt("ZKGroups", zkGroupsAddress)
 
-        const zkGroupsSemaphore = await ethers.getContractAt("ZKGroupsSemaphore", await sugestoContract.zkGroupsSempahore()) as ZKGroupsSemaphore;
-        const zkGroups = await ethers.getContractAt("ZKGroups", await zkGroupsSemaphore.zkGroups()) as ZKGroups;
+        await zkGroups.updateGroups([
+            {
+                id: groupId,
+                fingerprint: group.root.toString()
+            }
+        ])
 
-        await zkGroups.updateGroups([{
-            id: groupId,
-            fingerprint: group.root.toString()
-        }])
+        const fingerprint = await zkGroups.groups(groupId)
 
-        expect(group.root.toString()).eq((await zkGroups.groups(groupId)).toString())
+        expect(group.root.toString()).eq(fingerprint.toString())
     })
 
     describe("# sendFeedback", () => {
@@ -49,22 +49,21 @@ describe("Sugesto", () => {
             const feedbackHash = solidityKeccak256(["string"], [feedback])
             const feedbackNumber = 1
 
-            const fullProof = await generateProof(users[1].identity, group, BigInt(feedbackNumber), feedbackHash, {
+            const fullProof = await generateProof(members[1], group, feedbackNumber, feedbackHash, {
                 wasmFilePath,
                 zkeyFilePath
             })
-            const solidityProof = packToSolidityProof(fullProof.proof)
 
-            const transaction = sugestoContract.sendFeedback(
+            const transaction = sugesto.sendFeedback(
                 groupId,
                 merkleTreeDepth,
                 feedback,
                 feedbackNumber,
-                fullProof.publicSignals.nullifierHash,
-                solidityProof
+                fullProof.nullifierHash,
+                fullProof.proof
             )
 
-            await expect(transaction).to.emit(sugestoContract, "NewFeedback").withArgs(feedback)
+            await expect(transaction).to.emit(sugesto, "NewFeedback").withArgs(feedback)
         })
     })
 })

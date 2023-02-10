@@ -9,11 +9,12 @@ contract Sugesto {
 
     event NewFeedback(string feedback);
 
-    uint8 FEEDBACK_LIMIT = 3;
-    IZKGroupsSemaphore public zkGroupsSempahore;
+    uint8 constant FEEDBACK_LIMIT = 3;
+
+    IZKGroupsSemaphore public zkGroupsSemaphore;
 
     constructor(address zkGroupsAddress) {
-        zkGroupsSempahore = IZKGroupsSemaphore(zkGroupsAddress);
+        zkGroupsSemaphore = IZKGroupsSemaphore(zkGroupsAddress);
     }
 
     function sendFeedback(
@@ -28,7 +29,7 @@ contract Sugesto {
             revert Sugesto__FeedbackLimitExceeded();
         }
 
-        zkGroupsSempahore.verifyProof(
+        zkGroupsSemaphore.verifyProof(
             groupId,
             merkleTreeDepth,
             uint256(keccak256(abi.encodePacked(feedback))), // Hash of the signal is used for proof computation

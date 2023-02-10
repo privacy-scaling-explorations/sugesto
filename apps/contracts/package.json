@@ -27,6 +27,7 @@
         "@types/chai": "^4.3.1",
         "@types/download": "^8.0.1",
         "@types/mocha": "^9.1.1",
+        "@zk-groups/hardhat": "0.1.2",
         "chai": "^4.2.0",
         "circomlibjs": "0.0.8",
         "dotenv": "^14.3.2",
@@ -42,7 +43,7 @@
         "typechain": "^8.0.0"
     },
     "dependencies": {
-        "@zk-groups/hardhat": "^0.1.1"
+        "@zk-groups/contracts": "0.1.1"
     },
     "config": {
         "solidity": {
