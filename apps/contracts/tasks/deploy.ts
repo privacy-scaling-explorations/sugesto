@@ -3,8 +3,9 @@ import { task, types } from "hardhat/config"
 task("deploy", "Deploy Sugesto contract")
     .addOptionalParam("zkGroupsSemaphore", "ZKGroupsSemaphore contract address", undefined, types.string)
     .addOptionalParam("group", "Group identifier", undefined, types.int)
+    .addOptionalParam("feedbackLimit", "Number of feedbacks allowed per event", 5, types.int)
     .addOptionalParam("logs", "Print the logs", true, types.boolean)
-    .setAction(async ({ logs, zkGroupsSemaphore: zkGroupsSemaphoreAddress, group: groupId }, { ethers, run }) => {
+    .setAction(async ({ logs, zkGroupsSemaphore: zkGroupsSemaphoreAddress, group: groupId, feedbackLimit }, { ethers, run }) => {
         if (!zkGroupsSemaphoreAddress) {
             const { address } = await run("deploy:zk-groups-semaphore", {
                 logs
@@ -19,7 +20,7 @@ task("deploy", "Deploy Sugesto contract")
 
         const SugestoFactory = await ethers.getContractFactory("Sugesto")
 
-        const sugesto = await SugestoFactory.deploy(zkGroupsSemaphoreAddress)
+        const sugesto = await SugestoFactory.deploy(zkGroupsSemaphoreAddress, feedbackLimit)
 
         await sugesto.deployed()
 

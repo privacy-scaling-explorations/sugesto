@@ -91,9 +91,9 @@ describe("Sugesto", () => {
             addMemberToGroup(member)
 
             const transaction = createFeedbackTransaction({ feedback, feedbackNumber: 1, member })
-            const transaction2 = createFeedbackTransaction({ feedback: "Hi", feedbackNumber: 1, member })
-
             await expect(transaction).to.emit(sugesto, "NewFeedback").withArgs(feedback)
+
+            const transaction2 = createFeedbackTransaction({ feedback: "Hi", feedbackNumber: 1, member })
             await expect(transaction2).to.be.revertedWith("ZKGroupsSemaphore__YouAreUsingTheSameNullifierTwice")
         })
 
@@ -103,7 +103,8 @@ describe("Sugesto", () => {
 
             addMemberToGroup(member)
 
-            const transaction = createFeedbackTransaction({ feedback, feedbackNumber: 4, member })
+            // Default limit is 5
+            const transaction = createFeedbackTransaction({ feedback, feedbackNumber: 6, member })
 
             await expect(transaction).to.be.revertedWith("Sugesto__FeedbackLimitExceeded")
         })
@@ -118,6 +119,21 @@ describe("Sugesto", () => {
             const transaction = createFeedbackTransaction({ feedback, feedbackNumber: 1, group: group2, member })
 
             await expect(transaction).to.be.revertedWith("Semaphore__InvalidProof")
+        })
+
+        it("Should allow admins to update the feedback limit", async () => {
+            const feedback = "Hello world"
+            const member = new Identity()
+
+            addMemberToGroup(member)
+
+            const transaction = createFeedbackTransaction({ feedback, feedbackNumber: 6, member })
+            await expect(transaction).to.be.revertedWith("Sugesto__FeedbackLimitExceeded")
+
+            await sugesto.updateFeedbackLimit(7)
+
+            const transaction3 = createFeedbackTransaction({ feedback, feedbackNumber: 6, member })
+            await expect(transaction3).to.emit(sugesto, "NewFeedback").withArgs(feedback)
         })
     })
 
