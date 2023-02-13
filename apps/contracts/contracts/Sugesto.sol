@@ -11,12 +11,13 @@ contract Sugesto is Ownable {
     event NewFeedback(string feedback);
     event BlacklistedFeedback(uint256[] feedbackHashes);
 
-    uint8 constant FEEDBACK_LIMIT = 3;
+    uint8 feedbackLimit;
 
     IZKGroupsSemaphore public zkGroupsSemaphore;
 
-    constructor(address zkGroupsAddress) {
+    constructor(address zkGroupsAddress, uint8 _feedbackLimit) {
         zkGroupsSemaphore = IZKGroupsSemaphore(zkGroupsAddress);
+        feedbackLimit = _feedbackLimit;
     }
 
     function sendFeedback(
@@ -27,7 +28,7 @@ contract Sugesto is Ownable {
         uint256 nullifierHash,
         uint256[8] calldata proof
     ) external {
-        if (feedbackNumber > FEEDBACK_LIMIT) {
+        if (feedbackNumber > feedbackLimit) {
             revert Sugesto__FeedbackLimitExceeded();
         }
 
@@ -45,5 +46,9 @@ contract Sugesto is Ownable {
 
     function blacklistFeedback(uint256[] calldata feedbackHashes) external onlyOwner {
         emit BlacklistedFeedback(feedbackHashes);
+    }
+
+    function updateFeedbackLimit(uint8 newLimit) external onlyOwner {
+        feedbackLimit = newLimit;
     }
 }
