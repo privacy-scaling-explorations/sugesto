@@ -1,6 +1,6 @@
 import { Contract, providers, Wallet } from "ethers"
 import type { NextApiRequest, NextApiResponse } from "next"
-import Feedback from "../../../contract-artifacts/Feedback.json"
+import Sugesto from "../../../contract-artifacts/Sugesto.json"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (typeof process.env.CONTRACT_ADDRESS !== "string") {
@@ -21,12 +21,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const provider = new providers.JsonRpcProvider(ethereumURL)
     const signer = new Wallet(ethereumPrivateKey, provider)
-    const contract = new Contract(contractAddress, Feedback.abi, signer)
+    const contract = new Contract(contractAddress, Sugesto.abi, signer)
 
-    const { feedback, merkleRoot, nullifierHash, solidityProof } = req.body
+    const { groupId, merkleTreeDepth, feedback, feedbackNumber, nullifierHash, proof } = req.body
 
     try {
-        const transaction = await contract.sendFeedback(feedback, merkleRoot, nullifierHash, solidityProof)
+        const transaction = await contract.sendFeedback(
+            groupId,
+            merkleTreeDepth,
+            feedback,
+            feedbackNumber,
+            nullifierHash,
+            proof
+        )
 
         await transaction.wait()
 
