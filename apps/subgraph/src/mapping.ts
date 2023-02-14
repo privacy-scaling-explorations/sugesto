@@ -21,7 +21,6 @@ export function handleNewFeedback(event: NewFeedback): void {
     log.info("Feedback '{}' has been created", [feedback.id])
 }
 
-
 export function handleBlacklistedFeedback(event: BlacklistedFeedbackEvent): void {
     log.debug(`BlacklistedFeedback event at block: {}`, [event.block.number.toString()])
 

@@ -2,8 +2,7 @@ import { Group } from "@semaphore-protocol/group"
 import { Identity } from "@semaphore-protocol/identity"
 import { generateProof } from "@semaphore-protocol/proof"
 import { expect } from "chai"
-import { poseidon } from "circomlibjs"
-import { keccak256, solidityKeccak256 } from "ethers/lib/utils"
+import { solidityKeccak256 } from "ethers/lib/utils"
 import { ethers, run } from "hardhat"
 // @ts-ignore: typechain folder will be generated after contracts compilation
 import { Sugesto } from "../build/typechain"
@@ -129,7 +128,12 @@ describe("Sugesto", () => {
 
             group2.addMembers([member.commitment])
 
-            const { transaction } = await createFeedbackTransaction({ feedback, feedbackNumber: 1, group: group2, member })
+            const { transaction } = await createFeedbackTransaction({
+                feedback,
+                feedbackNumber: 1,
+                group: group2,
+                member
+            })
 
             await expect(transaction).to.be.revertedWith("Semaphore__InvalidProof")
         })
@@ -145,14 +149,18 @@ describe("Sugesto", () => {
 
             await sugesto.updateFeedbackLimit(7)
 
-            const { transaction: transaction2, nullifierHash } = await createFeedbackTransaction({ feedback, feedbackNumber: 6, member })
+            const { transaction: transaction2, nullifierHash } = await createFeedbackTransaction({
+                feedback,
+                feedbackNumber: 6,
+                member
+            })
             await expect(transaction2).to.emit(sugesto, "NewFeedback").withArgs(feedback, nullifierHash)
         })
     })
 
     describe("# blacklistFeedback", () => {
         const feedback = "Fuck the system"
-        let member : Identity;
+        let member: Identity
 
         before(async () => {
             member = new Identity()
