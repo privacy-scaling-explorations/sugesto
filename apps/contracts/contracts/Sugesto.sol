@@ -9,7 +9,7 @@ contract Sugesto is Ownable {
     error Sugesto__FeedbackLimitExceeded();
 
     event NewFeedback(string feedback, uint256 nullifierHash);
-    event BlacklistedFeedback(uint256[] feedbackHashes);
+    event BlacklistedFeedback(uint256[] feedbackNullifierHashes);
 
     uint8 feedbackLimit;
 
@@ -44,8 +44,8 @@ contract Sugesto is Ownable {
         emit NewFeedback(feedback, nullifierHash);
     }
 
-    function blacklistFeedback(uint256[] calldata feedbackHashes) external onlyOwner {
-        emit BlacklistedFeedback(feedbackHashes);
+    function blacklistFeedback(uint256[] calldata feedbackNullifierHashes) external onlyOwner {
+        emit BlacklistedFeedback(feedbackNullifierHashes);
     }
 
     function updateFeedbackLimit(uint8 newLimit) external onlyOwner {

@@ -152,21 +152,20 @@ describe("Sugesto", () => {
 
     describe("# blacklistFeedback", () => {
         const feedback = "Fuck the system"
+        let member : Identity;
 
         before(async () => {
-            const member = new Identity()
+            member = new Identity()
 
             addMemberToGroup(member)
-
-            await createFeedbackTransaction({ feedback, feedbackNumber: 1, member })
         })
 
         it("Should blacklist hateful feedback messages", async () => {
-            const feedbackHash = solidityKeccak256(["string"], [feedback])
+            const { nullifierHash } = await createFeedbackTransaction({ feedback, feedbackNumber: 1, member })
 
-            const transaction = sugesto.blacklistFeedback([feedbackHash])
+            const transaction = sugesto.blacklistFeedback([nullifierHash])
 
-            await expect(transaction).to.emit(sugesto, "BlacklistedFeedback").withArgs([feedbackHash])
+            await expect(transaction).to.emit(sugesto, "BlacklistedFeedback").withArgs([nullifierHash])
         })
     })
 })
