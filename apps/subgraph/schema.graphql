@@ -1,10 +1,6 @@
-type User @entity {
-    id: ID!
-    identityCommitment: BigInt!
-    username: String!
-}
-
 type Feedback @entity {
     id: ID!
     feedback: String!
+    nullifierHash: BigInt!
+    isBlacklisted: Boolean!
 }
