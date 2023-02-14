@@ -1,43 +1,39 @@
-import { ByteArray, log } from "@graphprotocol/graph-ts"
-import { NewFeedback, NewUser } from "../generated/Feedback/Feedback"
-import { Feedback, User } from "../generated/schema"
-import { concat, hash } from "./utils"
+import { log } from "@graphprotocol/graph-ts"
+import { NewFeedback, BlacklistedFeedback as BlacklistedFeedbackEvent } from "../generated/Sugesto/Sugesto"
+import { Feedback } from "../generated/schema"
 
 /**
- * Creates a new user.
- * @param event Ethereum event emitted when a user is created.
- */
-export function createUser(event: NewUser): void {
-    log.debug(`NewUser event block: {}`, [event.block.number.toString()])
-
-    const userId = hash(concat(ByteArray.fromBigInt(event.logIndex), event.transaction.hash))
-    const user = new User(userId)
-
-    log.info("Creating user '{}'", [user.id])
-
-    user.identityCommitment = event.params.identityCommitment
-    user.username = event.params.username.toString()
-
-    user.save()
-
-    log.info("User '{}' has been created", [user.id])
-}
-
-/**
- * Creates a new anonymous feedback.
+ * Creates a new Feedback.
  * @param event Ethereum event emitted when a user sends a feedback anonymously.
  */
-export function createFeedback(event: NewFeedback): void {
-    log.debug(`NewFeedback event block: {}`, [event.block.number.toString()])
+export function handleNewFeedback(event: NewFeedback): void {
+    log.debug(`NewFeedback event at block: {}`, [event.block.number.toString()])
 
-    const feedbackId = hash(concat(ByteArray.fromBigInt(event.logIndex), event.transaction.hash))
+    const feedbackId = event.params.nullifierHash.toString()
+
     const feedback = new Feedback(feedbackId)
-
-    log.info("Creating feedback '{}'", [feedback.id])
-
     feedback.feedback = event.params.feedback
+    feedback.nullifierHash = event.params.nullifierHash
+    feedback.isBlacklisted = false
 
     feedback.save()
 
     log.info("Feedback '{}' has been created", [feedback.id])
+}
+
+export function handleBlacklistedFeedback(event: BlacklistedFeedbackEvent): void {
+    log.debug(`BlacklistedFeedback event at block: {}`, [event.block.number.toString()])
+
+    for (let i = 0; i < event.params.feedbackNullifierHashes.length; i += 1) {
+        const feedbackId = event.params.feedbackNullifierHashes[i].toString()
+        log.info("Blacklisting feedback '{}'", [feedbackId])
+        const feedback = Feedback.load(feedbackId)
+
+        if (feedback != null) {
+            feedback.isBlacklisted = true
+            feedback.save()
+
+            log.info("Feedback '{}' has been blacklisted", [feedback.id])
+        }
+    }
 }
