@@ -1,5 +1,6 @@
 import React from "react"
-import { Box, Button, Divider, Heading, HStack, Link, ListItem, OrderedList, Text } from "@chakra-ui/react"
+import { Box, Button, Divider, Heading, Spinner, Text } from "@chakra-ui/react"
+import { useConnectModal } from "@rainbow-me/rainbowkit"
 import { Identity } from "@semaphore-protocol/identity"
 import { useRouter } from "next/router"
 import API from "../API"
@@ -7,19 +8,21 @@ import usePromise from "../hooks/use-promise"
 
 export default function JoinPage() {
     const router = useRouter()
-    const { inviteCode } = router.query
+    const { openConnectModal } = useConnectModal()
 
     const [_identity, setIdentity] = React.useState<Identity>()
+    const [isModalOpen, setIsModalOpen] = React.useState(false)
 
-    const [invite, { isFetching }] = usePromise(() => API.getInvite(inviteCode as string), {
+    const { inviteCode } = router.query
+    const [invite, { isFetching, error }] = usePromise(() => API.getInvite(inviteCode as string), {
         conditions: [inviteCode]
     })
 
     if (isFetching) {
-        return <Text>Loading...</Text>
+        return <Spinner className="text-center" />
     }
 
-    if (!invite || invite.redeemed === true) {
+    if (error || !invite || invite.redeemed === true) {
         return <Text>Invitation code is invalid or already redeemed.</Text>
     }
 
@@ -43,8 +46,7 @@ export default function JoinPage() {
                     justifyContent="left"
                     colorScheme="primary"
                     px="4"
-                    // onClick={createIdentity}
-                    // leftIcon={<IconAddCircleFill />}
+                    onClick={() => setIsModalOpen(true)}
                 >
                     Leave event feedback
                 </Button>
@@ -52,9 +54,32 @@ export default function JoinPage() {
 
             <Text>
                 If you do not wish to join this group, simply close this tab in your browser. Every invitation link can
-                only be used once and may expire.
-                Learn more about Sugesto
+                only be used once and may expire. Learn more about Sugesto
             </Text>
+
+            {isModalOpen && (
+                <>
+                    <Divider my={8} />
+                    <Box>
+                        <Text>
+                            Use your wallet to generate an anonymous Semaphore identity. Sugesto cannot learn your
+                            wallet address from your anonymous identity.
+                        </Text>
+
+                        <Button
+                            w="100%"
+                            fontWeight="bold"
+                            justifyContent="left"
+                            colorScheme="primary"
+                            px="4"
+                            mt={4}
+                            onClick={() => openConnectModal?.()}
+                        >
+                            Connect Wallet
+                        </Button>
+                    </Box>
+                </>
+            )}
 
             {/* {_identity ? (
                 <Box py="6" whiteSpace="nowrap">

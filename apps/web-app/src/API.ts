@@ -9,6 +9,10 @@ type Invite = {
 export default class API {
   static async getInvite(inviteCode: string) {
     const response = await fetch(`${zkGroupsUrl}/invites/${inviteCode}`)
+    if (!response.ok) {
+      throw new Error(response.statusText)
+    }
+
     return response.json() as Promise<Invite>;
   }
 }

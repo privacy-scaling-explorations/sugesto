@@ -1,49 +1,64 @@
-import { ChakraProvider, Container, HStack, Spinner, Stack, Text } from "@chakra-ui/react"
+import { ChakraProvider, Container, Stack } from "@chakra-ui/react"
 import "@fontsource/inter/400.css"
+import "@rainbow-me/rainbowkit/styles.css"
 import type { AppProps } from "next/app"
 import Head from "next/head"
-import { useRouter } from "next/router"
-import { useState } from "react"
-import LogsContext from "../context/LogsContext"
+import { connectorsForWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit"
+import { configureChains, createClient, WagmiConfig } from "wagmi"
+import { goerli } from "wagmi/chains"
+import {
+    metaMaskWallet,
+    coinbaseWallet,
+    walletConnectWallet,
+    injectedWallet
+} from "@rainbow-me/rainbowkit/wallets"
+import { publicProvider } from "wagmi/providers/public"
 import theme from "../styles/index"
 
-export default function App({ Component, pageProps }: AppProps) {
-    const router = useRouter()
-    const [_logs, setLogs] = useState<string>("")
+const { chains, provider, webSocketProvider } = configureChains([goerli], [publicProvider()])
 
+const connectors = connectorsForWallets([
+    {
+        groupName: "Wallets",
+        wallets: [
+            injectedWallet({ chains }),
+            metaMaskWallet({ chains }),
+            coinbaseWallet({ appName: "Zk Groups", chains }),
+            walletConnectWallet({ chains })
+        ]
+    }
+])
+
+const wagmiClient = createClient({
+    autoConnect: false,
+    connectors,
+    provider,
+    webSocketProvider
+})
+
+export default function App({ Component, pageProps }: AppProps) {
     return (
         <>
             <Head>
                 <title>Sugesto</title>
             </Head>
 
-            <ChakraProvider theme={theme}>
-                <Container maxW="lg" flex="1" display="flex" alignItems="center">
-                    <Stack py="8" display="flex" width="100%">
-                        <LogsContext.Provider
-                            value={{
-                                _logs,
-                                setLogs
-                            }}
+            <WagmiConfig client={wagmiClient}>
+                <RainbowKitProvider chains={chains} initialChain={goerli}>
+                    <ChakraProvider theme={theme}>
+                        <Container
+                            maxW="lg"
+                            flex="1"
+                            display="flex"
+                            justifyContent="center"
+                            width="100%"
+                            flexDir="column"
                         >
                             <Component {...pageProps} />
-                        </LogsContext.Provider>
-                    </Stack>
-                </Container>
-
-                <HStack
-                    flexBasis="56px"
-                    borderTop="1px solid #8f9097"
-                    backgroundColor="#DAE0FF"
-                    align="center"
-                    justify="center"
-                    spacing="4"
-                    p="4"
-                >
-                    {_logs.endsWith("...") && <Spinner color="primary.400" />}
-                    <Text fontWeight="bold">{_logs || `Current step: ${router.route}`}</Text>
-                </HStack>
-            </ChakraProvider>
+                        </Container>
+                    </ChakraProvider>
+                </RainbowKitProvider>
+            </WagmiConfig>
         </>
     )
 }
