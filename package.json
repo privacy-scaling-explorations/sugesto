@@ -7,7 +7,7 @@
     "bugs": "https://github.com/privacy-scaling-explorations/sugesto/issues",
     "private": true,
     "scripts": {
-        "start": "yarn workspace web-app dev",
+        "start": "PORT=4000 yarn workspace web-app dev",
         "lint": "eslint . --ext .js,.ts",
         "prettier": "prettier -c .",
         "prettier:write": "prettier -w .",
