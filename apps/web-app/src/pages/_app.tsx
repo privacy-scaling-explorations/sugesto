@@ -1,65 +1,59 @@
-import { ChakraProvider, Container, HStack, Spinner, Stack, Text } from "@chakra-ui/react"
+import { ChakraProvider, Container } from "@chakra-ui/react"
 import "@fontsource/inter/400.css"
+import "@rainbow-me/rainbowkit/styles.css"
 import type { AppProps } from "next/app"
 import Head from "next/head"
-import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
-import LogsContext from "../context/LogsContext"
-import SubgraphContext from "../context/SubgraphContext"
-import useSubgraph from "../hooks/useSubgraph"
+import { connectorsForWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit"
+import { configureChains, createClient, WagmiConfig } from "wagmi"
+import { goerli } from "wagmi/chains"
+import { metaMaskWallet, coinbaseWallet, walletConnectWallet, injectedWallet } from "@rainbow-me/rainbowkit/wallets"
+import { publicProvider } from "wagmi/providers/public"
 import theme from "../styles/index"
 
+const { chains, provider, webSocketProvider } = configureChains([goerli], [publicProvider()])
+
+const connectors = connectorsForWallets([
+    {
+        groupName: "Wallets",
+        wallets: [
+            injectedWallet({ chains }),
+            metaMaskWallet({ chains }),
+            coinbaseWallet({ appName: "Zk Groups", chains }),
+            walletConnectWallet({ chains })
+        ]
+    }
+])
+
+const wagmiClient = createClient({
+    autoConnect: false,
+    connectors,
+    provider,
+    webSocketProvider
+})
+
 export default function App({ Component, pageProps }: AppProps) {
-    const router = useRouter()
-    const subgraph = useSubgraph()
-    const [_logs, setLogs] = useState<string>("")
-
-    useEffect(() => {
-        subgraph.refreshUsers()
-        subgraph.refreshFeedback()
-    }, [])
-
     return (
         <>
             <Head>
-                <title>Semaphore boilerplate</title>
-                <link rel="icon" href="/favicon.ico" />
-                <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-                <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-                <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-                <link rel="manifest" href="/manifest.json" />
-                <meta name="theme-color" content="#ebedff" />
+                <title>Sugesto</title>
             </Head>
 
-            <ChakraProvider theme={theme}>
-                <Container maxW="lg" flex="1" display="flex" alignItems="center">
-                    <Stack py="8" display="flex" width="100%">
-                        <SubgraphContext.Provider value={subgraph}>
-                            <LogsContext.Provider
-                                value={{
-                                    _logs,
-                                    setLogs
-                                }}
-                            >
-                                <Component {...pageProps} />
-                            </LogsContext.Provider>
-                        </SubgraphContext.Provider>
-                    </Stack>
-                </Container>
-
-                <HStack
-                    flexBasis="56px"
-                    borderTop="1px solid #8f9097"
-                    backgroundColor="#DAE0FF"
-                    align="center"
-                    justify="center"
-                    spacing="4"
-                    p="4"
-                >
-                    {_logs.endsWith("...") && <Spinner color="primary.400" />}
-                    <Text fontWeight="bold">{_logs || `Current step: ${router.route}`}</Text>
-                </HStack>
-            </ChakraProvider>
+            <WagmiConfig client={wagmiClient}>
+                <RainbowKitProvider chains={chains} initialChain={goerli}>
+                    <ChakraProvider theme={theme}>
+                        <Container
+                            maxW="lg"
+                            flex="1"
+                            display="flex"
+                            justifyContent="center"
+                            width="100%"
+                            flexDir="column"
+                        >
+                            <Component {...pageProps} />
+                        </Container>
+                    </ChakraProvider>
+                </RainbowKitProvider>
+            </WagmiConfig>
         </>
     )
 }
