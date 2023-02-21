@@ -1,4 +1,4 @@
-import { ChakraProvider, Container, Stack } from "@chakra-ui/react"
+import { ChakraProvider, Container } from "@chakra-ui/react"
 import "@fontsource/inter/400.css"
 import "@rainbow-me/rainbowkit/styles.css"
 import type { AppProps } from "next/app"

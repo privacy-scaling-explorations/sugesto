@@ -1,22 +1,53 @@
 import React from "react"
 import { Box, Button, Divider, Heading, Spinner, Text } from "@chakra-ui/react"
 import { useConnectModal } from "@rainbow-me/rainbowkit"
-import { Identity } from "@semaphore-protocol/identity"
 import { useRouter } from "next/router"
+import { useAccount, useSignMessage } from "wagmi"
 import API from "../API"
 import usePromise from "../hooks/use-promise"
+import useSemaphore from "../hooks/use-sempahore"
 
 export default function JoinPage() {
     const router = useRouter()
     const { openConnectModal } = useConnectModal()
+    const { signMessageAsync } = useSignMessage()
+    const { generateIdentity, getIdentity } = useSemaphore()
 
-    const [_identity, setIdentity] = React.useState<Identity>()
     const [isModalOpen, setIsModalOpen] = React.useState(false)
 
     const { inviteCode } = router.query
     const [invite, { isFetching, error }] = usePromise(() => API.getInvite(inviteCode as string), {
         conditions: [inviteCode]
     })
+
+    async function getSignatureAndGenerateIdentity() {
+        try {
+            const signature = await signMessageAsync({ message: invite.group })
+            generateIdentity(invite.group, signature)
+            router.push(`/event/${invite.group}`)
+        } catch (e) {
+            console.error("error", e)
+            alert("Error ocurred while generating anonymous identity")
+        }
+    }
+
+    const { isConnected } = useAccount({ onConnect: getSignatureAndGenerateIdentity })
+
+    function onLeaveFeedbackClick() {
+        if (getIdentity(invite.group)) {
+            router.push(`/event/${invite.group}`)
+        } else {
+            setIsModalOpen(true)
+        }
+    }
+
+    async function onConnectWalletClick() {
+        if (isConnected) {
+            await getSignatureAndGenerateIdentity()
+        } else {
+            openConnectModal?.()
+        }
+    }
 
     if (isFetching) {
         return <Spinner className="text-center" />
@@ -29,7 +60,6 @@ export default function JoinPage() {
     return (
         <>
             <Text>Thanks for attending</Text>
-
             <Heading as="h3" size="xl">
                 {invite.group}
             </Heading>
@@ -46,7 +76,8 @@ export default function JoinPage() {
                     justifyContent="left"
                     colorScheme="primary"
                     px="4"
-                    onClick={() => setIsModalOpen(true)}
+                    disabled={isModalOpen}
+                    onClick={onLeaveFeedbackClick}
                 >
                     Leave event feedback
                 </Button>
@@ -73,43 +104,13 @@ export default function JoinPage() {
                             colorScheme="primary"
                             px="4"
                             mt={4}
-                            onClick={() => openConnectModal?.()}
+                            onClick={onConnectWalletClick}
                         >
                             Connect Wallet
                         </Button>
                     </Box>
                 </>
             )}
-
-            {/* {_identity ? (
-                <Box py="6" whiteSpace="nowrap">
-                    <Box p="5" borderWidth={1} borderColor="gray.500" borderRadius="4px">
-                        <Text textOverflow="ellipsis" overflow="hidden">
-                            Trapdoor: {_identity.trapdoor.toString()}
-                        </Text>
-                        <Text textOverflow="ellipsis" overflow="hidden">
-                            Nullifier: {_identity.nullifier.toString()}
-                        </Text>
-                        <Text textOverflow="ellipsis" overflow="hidden">
-                            Commitment: {_identity.commitment.toString()}
-                        </Text>
-                    </Box>
-                </Box>
-            ) : (
-                <Box py="6">
-                    <Button
-                        w="100%"
-                        fontWeight="bold"
-                        justifyContent="left"
-                        colorScheme="primary"
-                        px="4"
-                        // onClick={createIdentity}
-                        // leftIcon={<IconAddCircleFill />}
-                    >
-                        Create identity
-                    </Button>
-                </Box>
-            )} */}
         </>
     )
 }
