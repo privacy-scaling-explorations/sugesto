@@ -7,7 +7,7 @@ const styles: Styles = {
             bg: "white",
             color: "text.700"
         },
-        "body, #__next, div[data-rk]" : {
+        "body, #__next, div[data-rk]": {
             minHeight: "100vh"
         },
         "#__next, div[data-rk]": {

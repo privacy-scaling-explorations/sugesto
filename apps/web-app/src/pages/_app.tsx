@@ -6,12 +6,7 @@ import Head from "next/head"
 import { connectorsForWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit"
 import { configureChains, createClient, WagmiConfig } from "wagmi"
 import { goerli } from "wagmi/chains"
-import {
-    metaMaskWallet,
-    coinbaseWallet,
-    walletConnectWallet,
-    injectedWallet
-} from "@rainbow-me/rainbowkit/wallets"
+import { metaMaskWallet, coinbaseWallet, walletConnectWallet, injectedWallet } from "@rainbow-me/rainbowkit/wallets"
 import { publicProvider } from "wagmi/providers/public"
 import theme from "../styles/index"
 
