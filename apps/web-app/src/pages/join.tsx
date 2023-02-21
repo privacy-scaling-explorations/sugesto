@@ -20,22 +20,34 @@ export default function JoinPage() {
         conditions: [inviteCode]
     })
 
-    async function getSignatureAndGenerateIdentity() {
+    async function generateIdentityAndJoinGroup() {
         try {
-            const signature = await signMessageAsync({ message: invite.group })
-            generateIdentity(invite.group, signature)
-            router.push(`/event/${invite.group}`)
+            let identity = getIdentity(invite.groupId)
+
+            if (!identity) {
+                const signature = await signMessageAsync({ message: invite.groupName })
+                identity = generateIdentity(invite.groupId, signature)
+            }
+
+            await API.joinGroup({
+                groupName: invite.groupName,
+                identityCommitment: identity.getCommitment().toString(),
+                inviteCode: inviteCode as string
+            })
+
+            router.push(`/event/${invite.groupId}`)
         } catch (e) {
             console.error("error", e)
-            alert("Error ocurred while generating anonymous identity")
+            alert("Error ocurred while join group")
         }
     }
 
-    const { isConnected } = useAccount({ onConnect: getSignatureAndGenerateIdentity })
+    const { isConnected } = useAccount({ onConnect: generateIdentityAndJoinGroup })
 
     function onLeaveFeedbackClick() {
-        if (getIdentity(invite.group)) {
-            router.push(`/event/${invite.group}`)
+        // If user already has an identity, join group and redirect
+        if (getIdentity(invite.groupId)) {
+            generateIdentityAndJoinGroup()
         } else {
             setIsModalOpen(true)
         }
@@ -43,7 +55,7 @@ export default function JoinPage() {
 
     async function onConnectWalletClick() {
         if (isConnected) {
-            await getSignatureAndGenerateIdentity()
+            await generateIdentityAndJoinGroup()
         } else {
             openConnectModal?.()
         }
@@ -61,7 +73,7 @@ export default function JoinPage() {
         <>
             <Text>Thanks for attending</Text>
             <Heading as="h3" size="xl">
-                {invite.group}
+                {invite.groupName}
             </Heading>
 
             <Text pt="2" fontSize="md">
