@@ -17,16 +17,25 @@ export default class API {
         return response.json() as Promise<Invite>
     }
 
+    static async getGroup(groupId: string) {
+        const response = await fetch(`${zkGroupsUrl}/groups/${groupId}`)
+        if (!response.ok) {
+            throw new Error(response.statusText)
+        }
+
+        return response.json() as Promise<{ name: string }>
+    }
+
     static async joinGroup({
-        groupName,
+        groupId,
         inviteCode,
         identityCommitment
     }: {
-        groupName: string
+        groupId: string
         inviteCode: string
         identityCommitment: string
     }) {
-        const response = await fetch(`${zkGroupsUrl}/groups/${groupName}/${identityCommitment}`, {
+        const response = await fetch(`${zkGroupsUrl}/groups/${groupId}/${identityCommitment}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

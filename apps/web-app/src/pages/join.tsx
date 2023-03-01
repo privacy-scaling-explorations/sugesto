@@ -30,12 +30,12 @@ export default function JoinPage() {
             }
 
             await API.joinGroup({
-                groupName: invite.groupName,
+                groupId: invite.groupId,
                 identityCommitment: identity.getCommitment().toString(),
                 inviteCode: inviteCode as string
             })
 
-            router.push(`/event/${invite.groupId}`)
+            router.push(`/events/${invite.groupId}/new`)
         } catch (e) {
             console.error("error", e)
             alert("Error ocurred while join group")
