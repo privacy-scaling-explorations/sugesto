@@ -11,7 +11,7 @@ contract Sugesto is Ownable {
     event NewFeedback(string feedback, uint256 nullifierHash);
     event BlacklistedFeedback(uint256[] feedbackNullifierHashes);
 
-    uint8 feedbackLimit;
+    uint8 public feedbackLimit;
 
     IZKGroupsSemaphore public zkGroupsSemaphore;
 
