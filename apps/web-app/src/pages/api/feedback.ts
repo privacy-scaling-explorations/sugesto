@@ -37,10 +37,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         await transaction.wait()
 
-        res.status(200).end()
+        res.json({ transactionHash: transaction.hash() })
     } catch (error: any) {
         console.error(error)
 
-        res.status(500).end()
+        res.status(500).json({
+            error: error.message
+        })
     }
 }
