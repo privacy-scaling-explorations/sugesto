@@ -69,12 +69,14 @@ yarn deploy --zk-groups-semaphore 0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9 --n
 # Sugesto contract has been deployed to: 0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9
 ```
 
-2. Update your `.env` file with your new contract address and group id.
+2. Update your `.env and apps/web-app/.env` files with the private key and the contract address.
 
-> **Note**  
+````bash
+
+> **Note**
 > Check the Semaphore contract addresses [here](https://semaphore.appliedzkp.org/docs/deployed-contracts#semaphore).
 
-> **Warning**  
+> **Warning**
 > The group id is a number!
 
 ### Deploy the subgraph
@@ -84,7 +86,7 @@ yarn deploy --zk-groups-semaphore 0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9 --n
 
 ```bash
 yarn auth <access-token>
-```
+````
 
 3. Deploy your subgraph:
 
