@@ -18,6 +18,11 @@ function getNetworks(): NetworksUserConfig {
         const accounts = [`0x${process.env.ETHEREUM_PRIVATE_KEY}`]
 
         return {
+            local: {
+                url: "http://localhost:8545",
+                chainId: 1337,
+                accounts,
+            },
             goerli: {
                 url: process.env.ETHEREUM_URL,
                 chainId: 5,
@@ -43,6 +48,7 @@ const hardhatConfig: HardhatUserConfig = {
         },
         ...getNetworks()
     },
+    // @ts-ignore
     gasReporter: {
         currency: "USD",
         enabled: process.env.REPORT_GAS === "true",
