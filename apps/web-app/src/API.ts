@@ -64,7 +64,10 @@ export default class API {
         }
 
         const result = (await response.json()) as {
-            root: string; leaf: string; siblings: string[]; pathIndices: number[]
+            root: string
+            leaf: string
+            siblings: string[]
+            pathIndices: number[]
         }
 
         const proof = {
@@ -74,7 +77,7 @@ export default class API {
             pathIndices: result!.pathIndices
         }
 
-        return proof;
+        return proof
     }
 
     static async submitFeedback({
@@ -83,7 +86,7 @@ export default class API {
         proof,
         nullifierHash,
         merkleTreeDepth,
-        feedbackNumber,
+        feedbackNumber
     }: {
         groupId: string
         feedback: string
@@ -108,7 +111,7 @@ export default class API {
         })
 
         if (!response.ok) {
-            const errorResponse = await response.json();
+            const errorResponse = await response.json()
             if (errorResponse) {
                 throw new Error(JSON.stringify(errorResponse, null, 2))
             } else {

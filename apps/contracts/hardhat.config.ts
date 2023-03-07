@@ -21,7 +21,7 @@ function getNetworks(): NetworksUserConfig {
             local: {
                 url: "http://localhost:8545",
                 chainId: 1337,
-                accounts,
+                accounts
             },
             goerli: {
                 url: process.env.ETHEREUM_URL,

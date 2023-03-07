@@ -35,9 +35,14 @@ export default function useSemaphore() {
 
         const feedbackHash = solidityKeccak256(["string"], [signal])
 
-        const proof = await generateSemaphoreProof(identity as Identity, membershipProof, externalNullifier, feedbackHash)
+        const proof = await generateSemaphoreProof(
+            identity as Identity,
+            membershipProof,
+            externalNullifier,
+            feedbackHash
+        )
 
-        return proof;
+        return proof
     }
 
     return {
