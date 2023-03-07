@@ -2,12 +2,11 @@ import { task, types } from "hardhat/config"
 
 task("deploy", "Deploy Sugesto contract")
     .addOptionalParam("zkGroupsSemaphore", "ZKGroupsSemaphore contract address", undefined, types.string)
-    .addOptionalParam("group", "Group identifier", undefined, types.int)
     .addOptionalParam("feedbackLimit", "Number of feedbacks allowed per event", 5, types.int)
     .addOptionalParam("logs", "Print the logs", true, types.boolean)
     .setAction(
         async (
-            { logs, zkGroupsSemaphore: zkGroupsSemaphoreAddress, group: groupId, feedbackLimit },
+            { logs, zkGroupsSemaphore: zkGroupsSemaphoreAddress, feedbackLimit },
             { ethers, run }
         ) => {
             if (!zkGroupsSemaphoreAddress) {
@@ -16,10 +15,6 @@ task("deploy", "Deploy Sugesto contract")
                 })
 
                 zkGroupsSemaphoreAddress = address
-            }
-
-            if (!groupId) {
-                groupId = process.env.GROUP_ID
             }
 
             const SugestoFactory = await ethers.getContractFactory("Sugesto")

@@ -1,16 +1,46 @@
 import React from "react"
-import { Heading, Spinner, Text } from "@chakra-ui/react"
+import { Button, Heading, Spinner, Text, Textarea } from "@chakra-ui/react"
 import { useRouter } from "next/router"
 import API from "../../../API"
 import usePromise from "../../../hooks/use-promise"
+import useSemaphore from "../../../hooks/use-sempahore"
 
 export default function NewFeedbackPage() {
     const router = useRouter()
-
     const { groupId } = router.query
-    const [group, { isFetching, error }] = usePromise(() => API.getGroup(groupId as string), {
+
+    const { generateProof } = useSemaphore()
+    const [feedback, setFeedback] = React.useState("")
+    const [isSubmitting, setIsSubmitting] = React.useState(false)
+
+    const [group, { isFetching, error: apiError }] = usePromise(() => API.getGroup(groupId as string), {
         conditions: [groupId]
     })
+
+    async function onSubmitClick(e: React.MouseEvent<HTMLButtonElement>) {
+        try {
+            e.preventDefault()
+            setIsSubmitting(true)
+
+            const feedbackNumber = 3 // TODO: Compute this dynamically
+
+            const proof = await generateProof(groupId as string, feedback, feedbackNumber)
+
+            await API.submitFeedback({
+                groupId: groupId as string,
+                proof: proof.proof,
+                merkleTreeDepth: group.treeDepth,
+                feedback,
+                feedbackNumber,
+                nullifierHash: proof.nullifierHash.toString()
+            })
+        } catch (error) {
+            alert("Unexpected error occurred. Please try again later.")
+            console.error(error)
+        } finally {
+            setIsSubmitting(false)
+        }
+    }
 
     if (isFetching) {
         return <Spinner />
@@ -18,6 +48,10 @@ export default function NewFeedbackPage() {
 
     if (!group) {
         return <Text>Group not found</Text>
+    }
+
+    if (apiError) {
+        return <Text>Error while fetching group details</Text>
     }
 
     return (
@@ -28,8 +62,14 @@ export default function NewFeedbackPage() {
             </Heading>
 
             <Text pt="2" fontSize="md">
-                Leave feedback
+                What feedback do you have for the event organizers?
             </Text>
+
+            <Textarea value={feedback} onChange={(e) => setFeedback(e.target.value)} />
+
+            <Button isLoading={isSubmitting} onClick={onSubmitClick}>
+                Share
+            </Button>
         </>
     )
 }
