@@ -6,9 +6,10 @@ schema:
 dataSources:
     - kind: ethereum/contract
       name: Sugesto
-      network: goerli
+      network: localhost  # Change this value to the network where contract is deployed (ethereum, goerli) 
       source:
-          address: "0xf4b146fba71f41e0592668ffbf264f1d186b2ca8"
+          # Change this to deployed contract address
+          address: "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9"
           abi: Sugesto
           startBlock: 1
       mapping:
@@ -22,7 +23,7 @@ dataSources:
               - name: Sugesto
                 file: ./contract-artifacts/Sugesto.json
           eventHandlers:
-              - event: NewFeedback(string,uint256)
+              - event: NewFeedback(uint256,string,uint256)
                 handler: handleNewFeedback
               - event: BlacklistedFeedback(uint256[])
                 handler: handleBlacklistedFeedback
