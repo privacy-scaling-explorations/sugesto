@@ -34,6 +34,8 @@ export default function NewFeedbackPage() {
                 feedbackNumber,
                 nullifierHash: proof.nullifierHash.toString()
             })
+
+            router.push(`/events/${groupId}/thank-you`)
         } catch (error) {
             alert("Unexpected error occurred. Please try again later.")
             console.error(error)
