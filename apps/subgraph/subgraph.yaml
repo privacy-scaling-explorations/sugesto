@@ -6,7 +6,7 @@ schema:
 dataSources:
     - kind: ethereum/contract
       name: Sugesto
-      network: localhost  # Change this value to the network where contract is deployed (ethereum, goerli) 
+      network: localhost # Change this value to the network where contract is deployed (ethereum, goerli)
       source:
           # Change this to deployed contract address
           address: "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9"
