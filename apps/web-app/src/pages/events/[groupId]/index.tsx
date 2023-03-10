@@ -1,6 +1,7 @@
 import React from "react"
 import { Box, Button, Card, CardBody, Heading, Spinner, Text } from "@chakra-ui/react"
 import { useRouter } from "next/router"
+import Link from "next/link"
 import Subgraph from "../../../subgraph"
 import usePromise from "../../../hooks/use-promise"
 import API from "../../../API"
@@ -36,6 +37,12 @@ export default function NewFeedbackPage() {
 
     return (
         <>
+            <Link href="/events">
+                <Text color="blue.500" mb="1rem">
+                    All Events
+                </Text>
+            </Link>
+
             <Heading size="md" mb="2rem">
                 {group.name}
             </Heading>
@@ -50,7 +57,9 @@ export default function NewFeedbackPage() {
                 ))}
             </Box>
 
-            <Text fontSize={12} mb={1}>Do you have more to say? You can leave feedback up to 5 times.</Text>
+            <Text fontSize={12} mb={1}>
+                Do you have more to say? You can leave feedback up to 5 times.
+            </Text>
 
             <Button colorScheme="gray" onClick={() => router.push(`/events/${groupId}/new`)}>
                 Share Again
