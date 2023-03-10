@@ -57,15 +57,26 @@ and add your environment variables.
 1. Go to the `apps/contracts` directory and deploy your contract:
 
 ```bash
-yarn deploy --semaphore <semaphore-address> --group <group-id> --network goerli
+yarn deploy --zk-groups-semaphore <zk-groups-semaphore-address>  --network [goerli | local]
 ```
 
-2. Update your `.env` file with your new contract address and group id.
+To deploy to local ETH node started from Zk-Groups project run the below command:
 
-> **Note**  
+```bash
+#CWD = /apps/contracts
+yarn deploy --zk-groups-semaphore 0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9 --network local
+
+# Sugesto contract has been deployed to: 0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9
+```
+
+2. Update your `.env and apps/web-app/.env` files with the private key and the contract address.
+
+````bash
+
+> **Note**
 > Check the Semaphore contract addresses [here](https://semaphore.appliedzkp.org/docs/deployed-contracts#semaphore).
 
-> **Warning**  
+> **Warning**
 > The group id is a number!
 
 ### Deploy the subgraph
@@ -75,7 +86,7 @@ yarn deploy --semaphore <semaphore-address> --group <group-id> --network goerli
 
 ```bash
 yarn auth <access-token>
-```
+````
 
 3. Deploy your subgraph:
 
