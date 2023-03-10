@@ -22,7 +22,7 @@ export default function NewFeedbackPage() {
             e.preventDefault()
             setIsSubmitting(true)
 
-            const feedbackNumber = 3 // TODO: Compute this dynamically
+            const feedbackNumber = 2 // TODO: Compute this dynamically
 
             const proof = await generateProof(groupId as string, feedback, feedbackNumber)
 

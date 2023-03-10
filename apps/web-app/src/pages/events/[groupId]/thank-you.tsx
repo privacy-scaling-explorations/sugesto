@@ -9,13 +9,15 @@ export default function ThaknkYouPage() {
 
     return (
         <>
-            <Heading as="h3" size="xl">
+            <Heading as="h3" size="md" mb={5}>
                 Thank you for sharing your feedback!
             </Heading>
 
-            <Text>Want to read what other attendees wrote?</Text>
+            <Text mb={10}>Want to read what other attendees wrote?</Text>
 
-            <Button onClick={() => router.push(`/events/${groupId}`)}>All Feedback →</Button>
+            <Button colorScheme="gray" onClick={() => router.push(`/events/${groupId}`)}>
+                All Feedback →
+            </Button>
         </>
     )
 }

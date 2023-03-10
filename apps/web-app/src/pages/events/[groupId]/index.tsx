@@ -49,7 +49,7 @@ export default function NewFeedbackPage() {
 
             <Box mb="5rem">
                 {feedback.map((f) => (
-                    <Card>
+                    <Card mb={2}>
                         <CardBody>
                             <Text>{f.feedback}</Text>
                         </CardBody>
