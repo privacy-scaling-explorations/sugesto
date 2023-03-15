@@ -8,7 +8,7 @@ import "hardhat/console.sol";
 contract Sugesto is Ownable {
     error Sugesto__FeedbackLimitExceeded();
 
-    event NewFeedback(string feedback, uint256 nullifierHash);
+    event NewFeedback(uint256 groupId, string feedback, uint256 nullifierHash);
     event BlacklistedFeedback(uint256[] feedbackNullifierHashes);
 
     uint8 public feedbackLimit;
@@ -41,7 +41,7 @@ contract Sugesto is Ownable {
             proof
         );
 
-        emit NewFeedback(feedback, nullifierHash);
+        emit NewFeedback(groupId, feedback, nullifierHash);
     }
 
     function blacklistFeedback(uint256[] calldata feedbackNullifierHashes) external onlyOwner {

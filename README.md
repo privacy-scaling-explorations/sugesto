@@ -74,14 +74,12 @@ yarn deploy --zk-groups-semaphore 0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9 --n
 ````bash
 
 > **Note**
-> Check the Semaphore contract addresses [here](https://semaphore.appliedzkp.org/docs/deployed-contracts#semaphore).
+> Check the Semaphore contract addresses [here](https://semaphore.appliedzkp.org/docs/deployed-contracts).
 
-> **Warning**
-> The group id is a number!
 
 ### Deploy the subgraph
 
-1. Go to the `apps/subgraph` directory and update the `subgraph.yaml` file by setting your contract address.
+1. Go to the `apps/subgraph` directory and update the `subgraph.yaml` file by setting your network name and contract address.
 2. Authenticate the account with your access token:
 
 ```bash

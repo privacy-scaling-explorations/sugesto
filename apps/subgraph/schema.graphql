@@ -1,6 +1,8 @@
 type Feedback @entity {
     id: ID!
+    groupId: BigInt!
     feedback: String!
     nullifierHash: BigInt!
     isBlacklisted: Boolean!
+    createdAt: BigInt!
 }

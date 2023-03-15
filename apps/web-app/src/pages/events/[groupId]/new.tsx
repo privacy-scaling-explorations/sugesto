@@ -22,7 +22,7 @@ export default function NewFeedbackPage() {
             e.preventDefault()
             setIsSubmitting(true)
 
-            const feedbackNumber = 3 // TODO: Compute this dynamically
+            const feedbackNumber = 2 // TODO: Compute this dynamically
 
             const proof = await generateProof(groupId as string, feedback, feedbackNumber)
 
@@ -34,6 +34,8 @@ export default function NewFeedbackPage() {
                 feedbackNumber,
                 nullifierHash: proof.nullifierHash.toString()
             })
+
+            router.push(`/events/${groupId}/thank-you`)
         } catch (error) {
             alert("Unexpected error occurred. Please try again later.")
             console.error(error)

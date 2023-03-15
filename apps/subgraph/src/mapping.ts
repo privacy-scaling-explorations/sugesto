@@ -15,6 +15,8 @@ export function handleNewFeedback(event: NewFeedback): void {
     feedback.feedback = event.params.feedback
     feedback.nullifierHash = event.params.nullifierHash
     feedback.isBlacklisted = false
+    feedback.groupId = event.params.groupId
+    feedback.createdAt = event.block.timestamp
 
     feedback.save()
 
