@@ -2,16 +2,16 @@ import React from "react"
 import { Box, Button, Card, CardBody, Heading, Spinner, Text } from "@chakra-ui/react"
 import { useRouter } from "next/router"
 import Link from "next/link"
-import Subgraph from "../../../subgraph"
+import Subgraph from "../../../api/subgraph"
 import usePromise from "../../../hooks/use-promise"
-import API from "../../../API"
+import ZkGroupsAPI from "../../../api/zk-groups"
 
 export default function NewFeedbackPage() {
     const router = useRouter()
     const { groupId } = router.query
 
     const [group, { isFetching: isFetchingGroup, error: apiError }] = usePromise(
-        () => API.getGroup(groupId as string),
+        () => ZkGroupsAPI.getGroup(groupId as string),
         {
             conditions: [groupId],
             defaultValue: {}
