@@ -74,7 +74,7 @@ yarn deploy --zk-groups-semaphore 0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9 --n
 ````bash
 
 > **Note**
-> Check the Semaphore contract addresses [here](https://semaphore.appliedzkp.org/docs/deployed-contracts#semaphore).
+> Check the Semaphore contract addresses [here](https://semaphore.appliedzkp.org/docs/deployed-contracts).
 
 
 ### Deploy the subgraph
