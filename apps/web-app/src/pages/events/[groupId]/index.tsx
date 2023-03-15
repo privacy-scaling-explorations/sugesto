@@ -48,6 +48,12 @@ export default function NewFeedbackPage() {
             </Heading>
 
             <Box mb="5rem">
+                {feedback.length === 0 && (
+                    <Text fontSize={16} mb={1}>
+                        No feedback yet. Be the first to share your thoughts!
+                    </Text>
+                )}
+
                 {feedback.map((f) => (
                     <Card mb={2}>
                         <CardBody>
