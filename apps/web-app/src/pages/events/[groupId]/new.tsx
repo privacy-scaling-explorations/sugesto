@@ -1,7 +1,7 @@
 import React from "react"
 import { Button, Heading, Spinner, Text, Textarea } from "@chakra-ui/react"
 import { useRouter } from "next/router"
-import API from "../../../API"
+import ZkGroupsAPI from "../../../api/zk-groups"
 import usePromise from "../../../hooks/use-promise"
 import useSemaphore from "../../../hooks/use-sempahore"
 
@@ -13,7 +13,7 @@ export default function NewFeedbackPage() {
     const [feedback, setFeedback] = React.useState("")
     const [isSubmitting, setIsSubmitting] = React.useState(false)
 
-    const [group, { isFetching, error: apiError }] = usePromise(() => API.getGroup(groupId as string), {
+    const [group, { isFetching, error: apiError }] = usePromise(() => ZkGroupsAPI.getGroup(groupId as string), {
         conditions: [groupId]
     })
 
@@ -26,7 +26,7 @@ export default function NewFeedbackPage() {
 
             const proof = await generateProof(groupId as string, feedback, feedbackNumber)
 
-            await API.submitFeedback({
+            await ZkGroupsAPI.submitFeedback({
                 groupId: groupId as string,
                 proof: proof.proof,
                 merkleTreeDepth: group.treeDepth,

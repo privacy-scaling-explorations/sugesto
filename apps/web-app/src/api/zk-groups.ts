@@ -8,13 +8,14 @@ type Invite = {
 }
 
 type Group = {
+    id: string
     admin: string
     name: string
     description: string
     treeDepth: number
 }
 
-export default class API {
+export default class ZkGroupsAPI {
     static async getInvite(inviteCode: string) {
         const response = await fetch(`${zkGroupsUrl}/invites/${inviteCode}`)
         if (!response.ok) {
@@ -22,6 +23,23 @@ export default class API {
         }
 
         return response.json() as Promise<Invite>
+    }
+
+    static async getAllSugestoGroups() {
+        const sugestoGroupsIds = process.env.NEXT_PUBLIC_SUGESTO_GROUP_IDS?.split(",") || []
+
+        const groups = await Promise.all(
+            sugestoGroupsIds.map(async (groupId) => {
+                const response = await fetch(`${zkGroupsUrl}/groups/${groupId}`)
+                if (!response.ok) {
+                    throw new Error(response.statusText)
+                }
+
+                return response.json() as Promise<Group>
+            })
+        )
+
+        return groups
     }
 
     static async getGroup(groupId: string) {

@@ -3,7 +3,7 @@ import { Box, Button, Divider, Heading, Spinner, Text } from "@chakra-ui/react"
 import { useConnectModal } from "@rainbow-me/rainbowkit"
 import { useRouter } from "next/router"
 import { useAccount, useSignMessage } from "wagmi"
-import API from "../API"
+import ZkGroupsAPI from "../api/zk-groups"
 import usePromise from "../hooks/use-promise"
 import useSemaphore from "../hooks/use-sempahore"
 
@@ -16,7 +16,7 @@ export default function JoinPage() {
     const [isModalOpen, setIsModalOpen] = React.useState(false)
 
     const { inviteCode } = router.query
-    const [invite, { isFetching, error }] = usePromise(() => API.getInvite(inviteCode as string), {
+    const [invite, { isFetching, error }] = usePromise(() => ZkGroupsAPI.getInvite(inviteCode as string), {
         conditions: [inviteCode]
     })
 
@@ -29,7 +29,7 @@ export default function JoinPage() {
                 identity = generateIdentity(invite.groupId, signature)
             }
 
-            await API.joinGroup({
+            await ZkGroupsAPI.joinGroup({
                 groupId: invite.groupId,
                 identityCommitment: identity.getCommitment().toString(),
                 inviteCode: inviteCode as string

@@ -1,7 +1,7 @@
 import { Identity } from "@semaphore-protocol/identity"
 import { generateProof as generateSemaphoreProof } from "@semaphore-protocol/proof"
 import { solidityKeccak256 } from "ethers/lib/utils.js"
-import API from "../API"
+import ZkGroupsAPI from "../api/zk-groups"
 
 const LOCAL_STORAGE_KEY = "sugesto.identity"
 
@@ -31,7 +31,7 @@ export default function useSemaphore() {
 
     async function generateProof(groupId: string, signal: string, externalNullifier: number) {
         const identity = getIdentity(groupId)
-        const membershipProof = await API.getMembershipProof(groupId, identity!.getCommitment().toString())
+        const membershipProof = await ZkGroupsAPI.getMembershipProof(groupId, identity!.getCommitment().toString())
 
         const feedbackHash = solidityKeccak256(["string"], [signal])
 

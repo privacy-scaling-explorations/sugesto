@@ -2,16 +2,16 @@ import React from "react"
 import { Box, Button, Card, CardBody, Heading, Spinner, Text } from "@chakra-ui/react"
 import { useRouter } from "next/router"
 import Link from "next/link"
-import Subgraph from "../../../subgraph"
+import Subgraph from "../../../api/subgraph"
 import usePromise from "../../../hooks/use-promise"
-import API from "../../../API"
+import ZkGroupsAPI from "../../../api/zk-groups"
 
 export default function NewFeedbackPage() {
     const router = useRouter()
     const { groupId } = router.query
 
     const [group, { isFetching: isFetchingGroup, error: apiError }] = usePromise(
-        () => API.getGroup(groupId as string),
+        () => ZkGroupsAPI.getGroup(groupId as string),
         {
             conditions: [groupId],
             defaultValue: {}
@@ -48,6 +48,12 @@ export default function NewFeedbackPage() {
             </Heading>
 
             <Box mb="5rem">
+                {feedback.length === 0 && (
+                    <Text fontSize={16} mb={1}>
+                        No feedback yet. Be the first to share your thoughts!
+                    </Text>
+                )}
+
                 {feedback.map((f) => (
                     <Card mb={2}>
                         <CardBody>
