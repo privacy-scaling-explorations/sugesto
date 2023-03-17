@@ -1,4 +1,6 @@
-const zkGroupsUrl = process.env.NEXT_PUBLIC_ZK_GROUPS_API_URL
+import getNextConfig from "next/config"
+
+const { publicRuntimeConfig: env } = getNextConfig()
 
 type Invite = {
     code: string
@@ -17,7 +19,7 @@ type Group = {
 
 export default class ZkGroupsAPI {
     static async getInvite(inviteCode: string) {
-        const response = await fetch(`${zkGroupsUrl}/invites/${inviteCode}`)
+        const response = await fetch(`${env.ZK_GROUPS_API_URL}/invites/${inviteCode}`)
         if (!response.ok) {
             throw new Error(response.statusText)
         }
@@ -26,11 +28,11 @@ export default class ZkGroupsAPI {
     }
 
     static async getAllSugestoGroups() {
-        const sugestoGroupsIds = process.env.NEXT_PUBLIC_SUGESTO_GROUP_IDS?.split(",") || []
+        const sugestoGroupsIds = env.SUGESTO_GROUP_IDS?.split(",") || []
 
         const groups = await Promise.all(
-            sugestoGroupsIds.map(async (groupId) => {
-                const response = await fetch(`${zkGroupsUrl}/groups/${groupId}`)
+            sugestoGroupsIds.map(async (groupId: any) => {
+                const response = await fetch(`${env.ZK_GROUPS_API_URL}/groups/${groupId}`)
                 if (!response.ok) {
                     throw new Error(response.statusText)
                 }
@@ -43,7 +45,7 @@ export default class ZkGroupsAPI {
     }
 
     static async getGroup(groupId: string) {
-        const response = await fetch(`${zkGroupsUrl}/groups/${groupId}`)
+        const response = await fetch(`${env.ZK_GROUPS_API_URL}/groups/${groupId}`)
         if (!response.ok) {
             throw new Error(response.statusText)
         }
@@ -60,7 +62,7 @@ export default class ZkGroupsAPI {
         inviteCode: string
         identityCommitment: string
     }) {
-        const response = await fetch(`${zkGroupsUrl}/groups/${groupId}/${identityCommitment}`, {
+        const response = await fetch(`${env.ZK_GROUPS_API_URL}/groups/${groupId}/${identityCommitment}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -76,7 +78,7 @@ export default class ZkGroupsAPI {
     }
 
     static async getMembershipProof(groupId: string, memberId: string) {
-        const response = await fetch(`${zkGroupsUrl}/groups/${groupId}/${memberId}/proof`)
+        const response = await fetch(`${env.ZK_GROUPS_API_URL}/groups/${groupId}/${memberId}/proof`)
         if (!response.ok) {
             throw new Error(response.statusText)
         }
