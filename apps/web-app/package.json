@@ -5,6 +5,7 @@
     "scripts": {
         "dev": "PORT=4000 next dev",
         "build": "next build",
+        "export": "next export",
         "start": "next start"
     },
     "installConfig": {
