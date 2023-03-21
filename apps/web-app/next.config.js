@@ -18,12 +18,16 @@ const nextConfig = withPWA({
     reactStrictMode: true,
     swcMinify: true,
     env: {
-        ETHEREUM_URL: process.env.ETHEREUM_URL,
+        DEFAULT_NETWORK: process.env.DEFAULT_NETWORK,
+        INFURA_API_KEY: process.env.INFURA_API_KEY,
         ETHEREUM_PRIVATE_KEY: process.env.ETHEREUM_PRIVATE_KEY,
         CONTRACT_ADDRESS: process.env.CONTRACT_ADDRESS
     },
     publicRuntimeConfig: {
-        GROUP_ID: process.env.GROUP_ID
+        SUGESTO_GROUP_IDS: process.env.SUGESTO_GROUP_IDS,
+        SUBGRAPH_URL: process.env.SUBGRAPH_URL,
+        ZK_GROUPS_API_URL: process.env.ZK_GROUPS_API_URL,
+        OPENZEPPELIN_AUTOTASK_WEBHOOK_URL: process.env.OPENZEPPELIN_AUTOTASK_WEBHOOK_URL
     },
     webpack: (config, { isServer }) => {
         if (!isServer) {

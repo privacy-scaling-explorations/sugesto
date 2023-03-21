@@ -1,8 +1,10 @@
-const subgraphURL = process.env.NEXT_PUBLIC_SUBGRAPH_URL
+import getNextConfig from "next/config"
+
+const { publicRuntimeConfig: env } = getNextConfig()
 
 export default class SemaphoreAPI {
     static async getFeedbacksForEvent(groupId: string) {
-        const response = await fetch(`${subgraphURL}`, {
+        const response = await fetch(`${env.SUBGRAPH_URL}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

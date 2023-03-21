@@ -85,7 +85,7 @@ describe("Sugesto", () => {
                 member
             })
 
-            await expect(transaction).to.emit(sugesto, "NewFeedback").withArgs(feedback, nullifierHash)
+            await expect(transaction).to.emit(sugesto, "NewFeedback").withArgs(groupId, feedback, nullifierHash)
         })
 
         it("Should fail if the user submit multiple feedback with same feedbackNumber", async () => {
@@ -99,13 +99,15 @@ describe("Sugesto", () => {
                 feedbackNumber: 1,
                 member
             })
-            await expect(transaction).to.emit(sugesto, "NewFeedback").withArgs(feedback, nullifierHash)
+
+            await expect(transaction).to.emit(sugesto, "NewFeedback").withArgs(groupId, feedback, nullifierHash)
 
             const { transaction: transaction2 } = await createFeedbackTransaction({
                 feedback: "Hi",
                 feedbackNumber: 1,
                 member
             })
+
             await expect(transaction2).to.be.revertedWith("ZKGroupsSemaphore__YouAreUsingTheSameNullifierTwice")
         })
 
@@ -154,7 +156,8 @@ describe("Sugesto", () => {
                 feedbackNumber: 6,
                 member
             })
-            await expect(transaction2).to.emit(sugesto, "NewFeedback").withArgs(feedback, nullifierHash)
+
+            await expect(transaction2).to.emit(sugesto, "NewFeedback").withArgs(groupId, feedback, nullifierHash)
         })
     })
 
