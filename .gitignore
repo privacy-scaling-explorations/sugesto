@@ -88,6 +88,7 @@ next-env.d.ts
 
 # The Graph
 generated
+subgraph.yaml
 
 # Auto Generated PWA files
 **/public/sw.js

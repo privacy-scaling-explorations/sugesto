@@ -35,6 +35,7 @@ out/
 
 # The Graph
 generated
+subgraph.template.yaml
 
 # Auto Generated PWA files
 **/public/sw.js

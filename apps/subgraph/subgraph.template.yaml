@@ -6,11 +6,11 @@ schema:
 dataSources:
     - kind: ethereum
       name: Sugesto
-      network: goerli
+      network: {{ network }}
       source:
-          address: "0x187a29433e131d39A8C58830e83554A3cEB5cfEB"
+          address: "{{ address }}"
           abi: Sugesto
-          startBlock: 8789193
+          startBlock: {{ startBlock }}
       mapping:
           kind: ethereum/events
           apiVersion: 0.0.6

@@ -1,0 +1,14 @@
+{
+    "goerli": {
+        "Sugesto": {
+            "address": "0x187a29433e131d39A8C58830e83554A3cEB5cfEB",
+            "startBlock": 8789193
+        }
+    },
+    "localhost": {
+        "Sugesto": {
+            "address": "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
+            "startBlock": 0
+        }
+    }
+}
