@@ -1,4 +1,5 @@
 import getNextConfig from "next/config"
+import Sugesto from "../../contract-artifacts/Sugesto.json"
 
 const { publicRuntimeConfig: env } = getNextConfig()
 
@@ -115,20 +116,35 @@ export default class ZkGroupsAPI {
         nullifierHash: string
         proof: any
     }) {
-        const response = await fetch(`/api/feedback`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                groupId,
-                merkleTreeDepth,
-                feedback,
-                feedbackNumber,
-                nullifierHash,
-                proof
+        let response: any
+
+        if (env.OPENZEPPELIN_AUTOTASK_WEBHOOK) {
+            response = await fetch(env.OPENZEPPELIN_AUTOTASK_WEBHOOK, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    abi: Sugesto.abi,
+                    address: env.CONTRACT_ADDRESS,
+                    functionName: "sendFeedback",
+                    functionParameters: [groupId, merkleTreeDepth, feedback, feedbackNumber, nullifierHash, proof]
+                })
             })
-        })
+        } else {
+            response = await fetch(`/api/feedback`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    groupId,
+                    merkleTreeDepth,
+                    feedback,
+                    feedbackNumber,
+                    nullifierHash,
+                    proof
+                })
+            })
+        }
 
         if (!response.ok) {
             const errorResponse = await response.json()
