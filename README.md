@@ -12,7 +12,7 @@
         <img alt="Github license" src="https://img.shields.io/github/license/privacy-scaling-explorations/sugesto.svg?style=flat-square">
     </a>
     <a href="https://github.com/privacy-scaling-explorations/sugesto/actions?query=workflow%3Astyle">
-        <img alt="GitHub Workflow style" src="https://img.shields.io/github/actions/workflow/status/privacy-scaling-explorations/sugesto/style?label=style&style=flat-square&logo=github">
+        <img alt="GitHub Workflow style" src="https://img.shields.io/github/actions/workflow/status/privacy-scaling-explorations/sugesto/style.yml?branch=main&label=style&style=flat-square&logo=github">
     </a>
     <a href="https://eslint.org/">
         <img alt="Linter eslint" src="https://img.shields.io/badge/linter-eslint-8080f2?style=flat-square&logo=eslint">
