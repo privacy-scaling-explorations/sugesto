@@ -27,7 +27,7 @@ const nextConfig = withPWA({
         SUGESTO_GROUP_IDS: process.env.SUGESTO_GROUP_IDS,
         SUBGRAPH_URL: process.env.SUBGRAPH_URL,
         ZK_GROUPS_API_URL: process.env.ZK_GROUPS_API_URL,
-        OPENZEPPELIN_AUTOTASK_WEBHOOK_URL: process.env.OPENZEPPELIN_AUTOTASK_WEBHOOK_URL,
+        OPENZEPPELIN_AUTOTASK_WEBHOOK: process.env.OPENZEPPELIN_AUTOTASK_WEBHOOK,
         CONTRACT_ADDRESS: process.env.CONTRACT_ADDRESS
     },
     webpack: (config, { isServer }) => {
