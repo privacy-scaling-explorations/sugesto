@@ -2,27 +2,27 @@ import React from "react"
 import { Box, Button, Card, CardBody, Heading, Spinner, Text } from "@chakra-ui/react"
 import { useRouter } from "next/router"
 import Link from "next/link"
-import Subgraph from "../../../api/subgraph"
-import usePromise from "../../../hooks/use-promise"
-import ZkGroupsAPI from "../../../api/zk-groups"
+import Subgraph from "../../api/subgraph"
+import usePromise from "../../hooks/use-promise"
+import BandadaAPI from "../../api/bandada"
 
 export default function NewFeedbackPage() {
     const router = useRouter()
-    const { groupId } = router.query
+    const { eventId } = router.query
 
     const [group, { isFetching: isFetchingGroup, error: apiError }] = usePromise(
-        () => ZkGroupsAPI.getGroup(groupId as string),
+        () => BandadaAPI.getGroup(eventId as string),
         {
-            conditions: [groupId],
+            conditions: [eventId],
             defaultValue: {}
         }
     )
 
     const [feedback, { isFetching: isFetchingFeedback, error: subgraphError }] = usePromise<any[]>(
-        () => Subgraph.getFeedbacksForEvent(groupId as string),
+        () => Subgraph.getFeedbacksForEvent(eventId as string),
         {
-            conditions: [groupId],
-            dependencies: [groupId],
+            conditions: [eventId],
+            dependencies: [eventId],
             defaultValue: []
         }
     )
@@ -37,7 +37,7 @@ export default function NewFeedbackPage() {
 
     return (
         <>
-            <Link href="/events">
+            <Link href="/">
                 <Text color="blue.500" mb="1rem">
                     All Events
                 </Text>
@@ -54,8 +54,8 @@ export default function NewFeedbackPage() {
                     </Text>
                 )}
 
-                {feedback.map((f) => (
-                    <Card mb={2}>
+                {feedback.map((f, i) => (
+                    <Card key={i} mb={2}>
                         <CardBody>
                             <Text>{f.feedback}</Text>
                         </CardBody>
@@ -67,7 +67,7 @@ export default function NewFeedbackPage() {
                 Do you have more to say? You can leave feedback up to 5 times.
             </Text>
 
-            <Button colorScheme="gray" onClick={() => router.push(`/events/${groupId}/new`)}>
+            <Button colorScheme="gray" onClick={() => router.push(`/${eventId}/new`)}>
                 Share Again
             </Button>
         </>

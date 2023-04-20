@@ -57,14 +57,14 @@ and add your environment variables.
 1. Go to the `apps/contracts` directory and deploy your contract:
 
 ```bash
-yarn deploy --zk-groups-semaphore <zk-groups-semaphore-address>  --network [goerli | local]
+yarn deploy --network [goerli | local]
 ```
 
-To deploy to local ETH node started from Zk-Groups project run the below command:
+To deploy to local ETH node started from Bandada project run the below command:
 
 ```bash
 #CWD = /apps/contracts
-yarn deploy --zk-groups-semaphore 0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9 --network local
+yarn deploy --bandada-semaphore 0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9 --network local
 
 # Sugesto contract has been deployed to: 0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9
 ```

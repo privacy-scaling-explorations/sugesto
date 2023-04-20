@@ -1,20 +1,20 @@
 import React from "react"
 import { Button, Heading, Spinner, Text, Textarea } from "@chakra-ui/react"
 import { useRouter } from "next/router"
-import ZkGroupsAPI from "../../../api/zk-groups"
-import usePromise from "../../../hooks/use-promise"
-import useSemaphore from "../../../hooks/use-sempahore"
+import BandadaAPI from "../../api/bandada"
+import usePromise from "../../hooks/use-promise"
+import useSemaphore from "../../hooks/use-sempahore"
 
 export default function NewFeedbackPage() {
     const router = useRouter()
-    const { groupId } = router.query
+    const { eventId } = router.query
 
     const { generateProof } = useSemaphore()
     const [feedback, setFeedback] = React.useState("")
     const [isSubmitting, setIsSubmitting] = React.useState(false)
 
-    const [group, { isFetching, error: apiError }] = usePromise(() => ZkGroupsAPI.getGroup(groupId as string), {
-        conditions: [groupId]
+    const [group, { isFetching, error: apiError }] = usePromise(() => BandadaAPI.getGroup(eventId as string), {
+        conditions: [eventId]
     })
 
     async function onSubmitClick(e: React.MouseEvent<HTMLButtonElement>) {
@@ -24,10 +24,10 @@ export default function NewFeedbackPage() {
 
             const feedbackNumber = 2 // TODO: Compute this dynamically
 
-            const proof = await generateProof(groupId as string, feedback, feedbackNumber)
+            const proof = await generateProof(eventId as string, feedback, feedbackNumber)
 
-            await ZkGroupsAPI.submitFeedback({
-                groupId: groupId as string,
+            await BandadaAPI.submitFeedback({
+                groupId: eventId as string,
                 proof: proof.proof,
                 merkleTreeDepth: group.treeDepth,
                 feedback,
@@ -35,7 +35,7 @@ export default function NewFeedbackPage() {
                 nullifierHash: proof.nullifierHash.toString()
             })
 
-            router.push(`/events/${groupId}/thank-you`)
+            router.push(`/${eventId}/thank-you`)
         } catch (error) {
             alert("Unexpected error occurred. Please try again later.")
             console.error(error)

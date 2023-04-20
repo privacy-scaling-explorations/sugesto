@@ -3,7 +3,7 @@ import { Box, Button, Divider, Heading, Spinner, Text } from "@chakra-ui/react"
 import { useConnectModal } from "@rainbow-me/rainbowkit"
 import { useRouter } from "next/router"
 import { useAccount, useSignMessage } from "wagmi"
-import ZkGroupsAPI from "../api/zk-groups"
+import BandadaAPI from "../api/bandada"
 import usePromise from "../hooks/use-promise"
 import useSemaphore from "../hooks/use-sempahore"
 
@@ -16,7 +16,7 @@ export default function JoinPage() {
     const [isModalOpen, setIsModalOpen] = React.useState(false)
 
     const { inviteCode } = router.query
-    const [invite, { isFetching, error }] = usePromise(() => ZkGroupsAPI.getInvite(inviteCode as string), {
+    const [invite, { isFetching, error }] = usePromise(() => BandadaAPI.getInvite(inviteCode as string), {
         conditions: [inviteCode]
     })
 
@@ -29,13 +29,13 @@ export default function JoinPage() {
                 identity = generateIdentity(invite.groupId, signature)
             }
 
-            await ZkGroupsAPI.joinGroup({
+            await BandadaAPI.joinGroup({
                 groupId: invite.groupId,
                 identityCommitment: identity.getCommitment().toString(),
                 inviteCode: inviteCode as string
             })
 
-            router.push(`/events/${invite.groupId}/new`)
+            router.push(`/${invite.groupId}/new`)
         } catch (e) {
             console.error("error", e)
             alert("Error ocurred while join group")

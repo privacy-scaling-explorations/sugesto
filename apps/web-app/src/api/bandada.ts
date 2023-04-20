@@ -18,9 +18,9 @@ type Group = {
     treeDepth: number
 }
 
-export default class ZkGroupsAPI {
+export default class BandadaAPI {
     static async getInvite(inviteCode: string) {
-        const response = await fetch(`${env.ZK_GROUPS_API_URL}/invites/${inviteCode}`)
+        const response = await fetch(`${env.BANDADA_API_URL}/invites/${inviteCode}`)
         if (!response.ok) {
             throw new Error(response.statusText)
         }
@@ -33,7 +33,7 @@ export default class ZkGroupsAPI {
 
         const groups = await Promise.all(
             sugestoGroupsIds.map(async (groupId: any) => {
-                const response = await fetch(`${env.ZK_GROUPS_API_URL}/groups/${groupId}`)
+                const response = await fetch(`${env.BANDADA_API_URL}/groups/${groupId}`)
                 if (!response.ok) {
                     throw new Error(response.statusText)
                 }
@@ -46,7 +46,7 @@ export default class ZkGroupsAPI {
     }
 
     static async getGroup(groupId: string) {
-        const response = await fetch(`${env.ZK_GROUPS_API_URL}/groups/${groupId}`)
+        const response = await fetch(`${env.BANDADA_API_URL}/groups/${groupId}`)
         if (!response.ok) {
             throw new Error(response.statusText)
         }
@@ -63,7 +63,7 @@ export default class ZkGroupsAPI {
         inviteCode: string
         identityCommitment: string
     }) {
-        const response = await fetch(`${env.ZK_GROUPS_API_URL}/groups/${groupId}/${identityCommitment}`, {
+        const response = await fetch(`${env.BANDADA_API_URL}/groups/${groupId}/${identityCommitment}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -79,7 +79,7 @@ export default class ZkGroupsAPI {
     }
 
     static async getMembershipProof(groupId: string, memberId: string) {
-        const response = await fetch(`${env.ZK_GROUPS_API_URL}/groups/${groupId}/${memberId}/proof`)
+        const response = await fetch(`${env.BANDADA_API_URL}/groups/${groupId}/${memberId}/proof`)
         if (!response.ok) {
             throw new Error(response.statusText)
         }

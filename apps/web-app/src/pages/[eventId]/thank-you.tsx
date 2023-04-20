@@ -5,7 +5,7 @@ import { useRouter } from "next/router"
 export default function ThaknkYouPage() {
     const router = useRouter()
 
-    const { groupId } = router.query
+    const { eventId } = router.query
 
     return (
         <>
@@ -15,7 +15,7 @@ export default function ThaknkYouPage() {
 
             <Text mb={10}>Want to read what other attendees wrote?</Text>
 
-            <Button colorScheme="gray" onClick={() => router.push(`/events/${groupId}`)}>
+            <Button colorScheme="gray" onClick={() => router.push(`/${eventId}`)}>
                 All Feedback →
             </Button>
         </>
