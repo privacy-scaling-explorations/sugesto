@@ -1,7 +1,7 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-import "@zk-groups/contracts/protocols/IZKGroupsSemaphore.sol";
+import "@bandada/contracts/protocols/IBandadaSemaphore.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "hardhat/console.sol";
 
@@ -13,10 +13,10 @@ contract Sugesto is Ownable {
 
     uint8 public feedbackLimit;
 
-    IZKGroupsSemaphore public zkGroupsSemaphore;
+    IBandadaSemaphore public bandadaSemaphore;
 
-    constructor(address zkGroupsAddress, uint8 _feedbackLimit) {
-        zkGroupsSemaphore = IZKGroupsSemaphore(zkGroupsAddress);
+    constructor(address bandadaSemaphoreAddress, uint8 _feedbackLimit) {
+        bandadaSemaphore = IBandadaSemaphore(bandadaSemaphoreAddress);
         feedbackLimit = _feedbackLimit;
     }
 
@@ -32,7 +32,7 @@ contract Sugesto is Ownable {
             revert Sugesto__FeedbackLimitExceeded();
         }
 
-        zkGroupsSemaphore.verifyProof(
+        bandadaSemaphore.verifyProof(
             groupId,
             merkleTreeDepth,
             uint256(keccak256(abi.encodePacked(feedback))), // Hash of the signal is used for proof computation

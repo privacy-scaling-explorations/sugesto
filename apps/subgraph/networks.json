@@ -1,8 +1,8 @@
 {
     "goerli": {
         "Sugesto": {
-            "address": "0x187a29433e131d39A8C58830e83554A3cEB5cfEB",
-            "startBlock": 8789193
+            "address": "0x84Fa211389a7Bd804d71FC73b7E85D90bd887dd9",
+            "startBlock": 8861814
         }
     },
     "localhost": {

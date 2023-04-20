@@ -50,20 +50,20 @@ describe("Sugesto", () => {
     async function addMemberToGroup(member: Identity) {
         group.addMembers([member.commitment])
 
-        const zkGroupsSemaphoreAddress = await sugesto.zkGroupsSemaphore()
-        const zkGroupsSemaphore = await ethers.getContractAt("ZKGroupsSemaphore", zkGroupsSemaphoreAddress)
+        const bandadaSemaphoreAddress = await sugesto.bandadaSemaphore()
+        const bandadaSemaphore = await ethers.getContractAt("BandadaSemaphore", bandadaSemaphoreAddress)
 
-        const zkGroupsAddress = await zkGroupsSemaphore.zkGroups()
-        const zkGroups = await ethers.getContractAt("ZKGroups", zkGroupsAddress)
+        const bandadaAddress = await bandadaSemaphore.bandada()
+        const bandada = await ethers.getContractAt("Bandada", bandadaAddress)
 
-        await zkGroups.updateGroups([
+        await bandada.updateGroups([
             {
                 id: groupId,
                 fingerprint: group.root.toString()
             }
         ])
 
-        const fingerprint = await zkGroups.groups(groupId)
+        const fingerprint = await bandada.groups(groupId)
 
         expect(group.root.toString()).eq(fingerprint.toString())
     }
@@ -108,7 +108,7 @@ describe("Sugesto", () => {
                 member
             })
 
-            await expect(transaction2).to.be.revertedWith("ZKGroupsSemaphore__YouAreUsingTheSameNullifierTwice")
+            await expect(transaction2).to.be.revertedWith("BandadaSemaphore__YouAreUsingTheSameNullifierTwice")
         })
 
         it("Should fail if the feedback number exceed the limit", async () => {
@@ -123,7 +123,7 @@ describe("Sugesto", () => {
             await expect(transaction).to.be.revertedWith("Sugesto__FeedbackLimitExceeded")
         })
 
-        it("Should fail if the group is not part of ZK groups", async () => {
+        it("Should fail if the group is not on Bandada contract", async () => {
             const feedback = "Hello world"
             const member = new Identity()
             const group2 = new Group(10, 20)
@@ -137,7 +137,7 @@ describe("Sugesto", () => {
                 member
             })
 
-            await expect(transaction).to.be.revertedWith("Semaphore__InvalidProof")
+            await expect(transaction).to.be.revertedWith("InvalidProof")
         })
 
         it("Should allow admins to update the feedback limit", async () => {
