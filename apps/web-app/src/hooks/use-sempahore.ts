@@ -1,7 +1,9 @@
 import { Identity } from "@semaphore-protocol/identity"
-import { generateProof as generateSemaphoreProof } from "@semaphore-protocol/proof"
+import { FullProof, generateProof as generateSemaphoreProof } from "@semaphore-protocol/proof"
 import { solidityKeccak256 } from "ethers/lib/utils.js"
 import BandadaAPI from "../api/bandada"
+import Subgraph from "../api/subgraph"
+import calculateNullifierHash from "../utils/calculateNullifierHash"
 
 const LOCAL_STORAGE_KEY = "sugesto.identity"
 
@@ -29,20 +31,33 @@ export default function useSemaphore() {
         return identity
     }
 
-    async function generateProof(groupId: string, signal: string, externalNullifier: number) {
+    async function generateProof(groupId: string, signal: string): Promise<FullProof | null> {
         const identity = getIdentity(groupId)
-        const membershipProof = await BandadaAPI.getMembershipProof(groupId, identity!.getCommitment().toString())
 
-        const feedbackHash = solidityKeccak256(["string"], [signal])
+        if (!identity) {
+            console.error("You should provide a valid identity")
+            return null
+        }
 
-        const proof = await generateSemaphoreProof(
-            identity as Identity,
-            membershipProof,
-            externalNullifier,
-            feedbackHash
+        // Calculate next external nullifier.
+        const nullifierHashes = (await Subgraph.getFeedbacksForEvent(groupId)).map(
+            ({ nullifierHash }: any) => nullifierHash
         )
 
-        return proof
+        for (let index = 0; index < 5; index += 1) {
+            if (!nullifierHashes.includes(calculateNullifierHash(identity.nullifier, index).toString())) {
+                const membershipProof = await BandadaAPI.getMembershipProof(
+                    groupId,
+                    identity!.getCommitment().toString()
+                )
+
+                const feedbackHash = solidityKeccak256(["string"], [signal])
+
+                return generateSemaphoreProof(identity as Identity, membershipProof, index, feedbackHash)
+            }
+        }
+
+        return null
     }
 
     return {

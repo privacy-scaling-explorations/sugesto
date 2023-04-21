@@ -112,7 +112,7 @@ export default class BandadaAPI {
         groupId: string
         feedback: string
         merkleTreeDepth: number
-        feedbackNumber: number
+        feedbackNumber: string
         nullifierHash: string
         proof: any
     }) {

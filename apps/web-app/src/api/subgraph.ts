@@ -13,6 +13,7 @@ export default class SemaphoreAPI {
                 query: `{
                     feedbacks(where: { groupId: "${groupId}" }) {
                         feedback
+                        nullifierHash
                         createdAt
                     }
                 }`

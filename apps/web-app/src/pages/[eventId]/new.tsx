@@ -1,6 +1,6 @@
-import React from "react"
 import { Button, Heading, Spinner, Text, Textarea } from "@chakra-ui/react"
 import { useRouter } from "next/router"
+import React from "react"
 import BandadaAPI from "../../api/bandada"
 import usePromise from "../../hooks/use-promise"
 import useSemaphore from "../../hooks/use-sempahore"
@@ -10,7 +10,7 @@ export default function NewFeedbackPage() {
     const { eventId } = router.query
 
     const { generateProof } = useSemaphore()
-    const [feedback, setFeedback] = React.useState("")
+    const [newFeedback, setNewFeedback] = React.useState("")
     const [isSubmitting, setIsSubmitting] = React.useState(false)
 
     const [group, { isFetching, error: apiError }] = usePromise(() => BandadaAPI.getGroup(eventId as string), {
@@ -22,20 +22,20 @@ export default function NewFeedbackPage() {
             e.preventDefault()
             setIsSubmitting(true)
 
-            const feedbackNumber = 2 // TODO: Compute this dynamically
+            const proof = await generateProof(eventId as string, newFeedback)
 
-            const proof = await generateProof(eventId as string, feedback, feedbackNumber)
+            if (proof) {
+                await BandadaAPI.submitFeedback({
+                    groupId: eventId as string,
+                    proof: proof.proof,
+                    merkleTreeDepth: group.treeDepth,
+                    feedback: newFeedback,
+                    feedbackNumber: proof.externalNullifier.toString(),
+                    nullifierHash: proof.nullifierHash.toString()
+                })
 
-            await BandadaAPI.submitFeedback({
-                groupId: eventId as string,
-                proof: proof.proof,
-                merkleTreeDepth: group.treeDepth,
-                feedback,
-                feedbackNumber,
-                nullifierHash: proof.nullifierHash.toString()
-            })
-
-            router.push(`/${eventId}/thank-you`)
+                router.push(`/${eventId}/thank-you`)
+            }
         } catch (error) {
             alert("Unexpected error occurred. Please try again later.")
             console.error(error)
@@ -67,7 +67,7 @@ export default function NewFeedbackPage() {
                 What feedback do you have for the event organizers?
             </Text>
 
-            <Textarea value={feedback} onChange={(e) => setFeedback(e.target.value)} />
+            <Textarea value={newFeedback} onChange={(e) => setNewFeedback(e.target.value)} />
 
             <Button isLoading={isSubmitting} onClick={onSubmitClick}>
                 Share

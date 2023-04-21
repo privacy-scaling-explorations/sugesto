@@ -18719,6 +18719,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"poseidon-lite@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "poseidon-lite@npm:0.2.0"
+  checksum: c47c6fd0a29a78ca1f7cf6ccb8b0c4f4e72930d944e63425e36f60c15d37fb0aeca30b8a22a30640ed68d631142282c0b8308da83b1a2b2bb92b87f5a2432c93
+  languageName: node
+  linkType: hard
+
 "posix-character-classes@npm:^0.1.0":
   version: 0.1.1
   resolution: "posix-character-classes@npm:0.1.1"
@@ -23198,6 +23205,7 @@ __metadata:
     framer-motion: ^7.6.6
     next: 13.0.3
     next-pwa: ^5.6.0
+    poseidon-lite: ^0.2.0
     react: 18.2.0
     react-dom: 18.2.0
     wagmi: ^0.11.6
