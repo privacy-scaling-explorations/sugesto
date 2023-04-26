@@ -8,9 +8,9 @@ dataSources:
       name: Sugesto
       network: goerli
       source:
-          address: "0x84Fa211389a7Bd804d71FC73b7E85D90bd887dd9"
+          address: "0x60ce53cFB914F3999ce20C34c1cB23c6E47169e3"
           abi: Sugesto
-          startBlock: 8861814
+          startBlock: 8895530
       mapping:
           kind: ethereum/events
           apiVersion: 0.0.6

@@ -9,8 +9,8 @@ on:
 
 env:
     BANDADA_API_URL: "https://bandada.appliedzkp.org/api"
-    SUBGRAPH_URL: "https://api.studio.thegraph.com/query/14377/sugesto/v0.2.0"
-    CONTRACT_ADDRESS: "0x84Fa211389a7Bd804d71FC73b7E85D90bd887dd9"
+    SUBGRAPH_URL: "https://api.studio.thegraph.com/query/14377/sugesto/v0.3.0"
+    CONTRACT_ADDRESS: "0x60ce53cFB914F3999ce20C34c1cB23c6E47169e3"
     DEFAULT_NETWORK: "goerli"
     SUGESTO_GROUP_IDS: "44963925652249551191678694310860"
     OPENZEPPELIN_AUTOTASK_WEBHOOK: "https://api.defender.openzeppelin.com/autotasks/dc809778-c08f-4d76-98dd-f8486acdef75/runs/webhook/303216d1-fa7d-4fca-8c5b-7ba1ba544fc7/J3xxFJrXmSk8Cf8v38oEk7"
