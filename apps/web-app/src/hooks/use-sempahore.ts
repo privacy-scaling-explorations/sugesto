@@ -1,9 +1,8 @@
 import { Identity } from "@semaphore-protocol/identity"
-import { FullProof, generateProof as generateSemaphoreProof } from "@semaphore-protocol/proof"
+import { FullProof, generateProof as generateSemaphoreProof, calculateNullifierHash } from "@semaphore-protocol/proof"
 import { solidityKeccak256 } from "ethers/lib/utils.js"
 import BandadaAPI from "../api/bandada"
 import Subgraph from "../api/subgraph"
-import calculateNullifierHash from "../utils/calculateNullifierHash"
 
 const LOCAL_STORAGE_KEY = "sugesto.identity"
 

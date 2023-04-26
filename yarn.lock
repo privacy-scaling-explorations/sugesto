@@ -4503,59 +4503,59 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@semaphore-protocol/contracts@npm:3.7.0":
-  version: 3.7.0
-  resolution: "@semaphore-protocol/contracts@npm:3.7.0"
+"@semaphore-protocol/contracts@npm:3.8.0":
+  version: 3.8.0
+  resolution: "@semaphore-protocol/contracts@npm:3.8.0"
   dependencies:
     "@openzeppelin/contracts": 4.7.3
     "@zk-kit/incremental-merkle-tree.sol": 1.3.3
-  checksum: f74cb7984ee08c9c61a906f5daa5b33360643fa919a9e41a04bf204362ec93bb4bd4026a0b2e294da98e75b2b8948d1b97c19de7c53ef7017530db264ff89bbe
+  checksum: ff186185658dbeb92cd0dcbf1ef8d168323b022fd0d1098c87f95fb60c0cd0bdbee0581cb4f452cb05e185a4d6f020a0da30bf862a88da3348f6788947707942
   languageName: node
   linkType: hard
 
-"@semaphore-protocol/group@npm:3.7.0":
-  version: 3.7.0
-  resolution: "@semaphore-protocol/group@npm:3.7.0"
+"@semaphore-protocol/group@npm:3.8.0":
+  version: 3.8.0
+  resolution: "@semaphore-protocol/group@npm:3.8.0"
   dependencies:
     "@ethersproject/bignumber": ^5.7.0
     "@ethersproject/bytes": ^5.7.0
     "@ethersproject/keccak256": ^5.7.0
     "@zk-kit/incremental-merkle-tree": 1.0.0
-  checksum: 35043c0c9fd3d730727d251ef9553353879bcccb783881df42aa7fa3693762f630b285450926b6ba4aa394d2ece87a6d15a474dc3af8c63be47954c1c40ea677
+  checksum: cc785418efcd6000c457a5962a979932b8dd3f0f9e54b5dfefaacb49c51b0c50e2bbe4c3447bd1e94a9a497515e40ccbe4aec96c158f8d0b0881929bcee1af69
   languageName: node
   linkType: hard
 
-"@semaphore-protocol/hardhat@npm:3.7.0":
-  version: 3.7.0
-  resolution: "@semaphore-protocol/hardhat@npm:3.7.0"
+"@semaphore-protocol/hardhat@npm:3.8.0":
+  version: 3.8.0
+  resolution: "@semaphore-protocol/hardhat@npm:3.8.0"
   dependencies:
     "@nomiclabs/hardhat-ethers": ^2.1.1
-    "@semaphore-protocol/contracts": 3.7.0
+    "@semaphore-protocol/contracts": 3.8.0
     circomlibjs: ^0.0.8
     ethers: ^5.7.1
     hardhat-dependency-compiler: ^1.1.3
   peerDependencies:
     hardhat: ^2.0.0
-  checksum: f082cc7cd8a5570bbba5a04c2fb037afbbd30d8db50e3ec58b2f08cf04081935ce6f9e8d4d22d3f0432303b156f690e4a89dcb4fd1ebfb1ecb83ac0733c40b18
+  checksum: 863c39d5ace77ffb30cfe4fea3f8a9f9a6c47fe9532cc90bd1a40c4a9b5c16c7a56e91fcb41e335cab7b64c5172ac0df2533c0efc53e812dd87287352513b8be
   languageName: node
   linkType: hard
 
-"@semaphore-protocol/identity@npm:3.7.0":
-  version: 3.7.0
-  resolution: "@semaphore-protocol/identity@npm:3.7.0"
+"@semaphore-protocol/identity@npm:3.8.0":
+  version: 3.8.0
+  resolution: "@semaphore-protocol/identity@npm:3.8.0"
   dependencies:
     "@ethersproject/bignumber": ^5.5.0
     "@ethersproject/keccak256": ^5.7.0
     "@ethersproject/random": ^5.5.1
     "@ethersproject/strings": ^5.6.1
     js-sha512: ^0.8.0
-  checksum: 4940b7a9cf9148d7841579177a55c95013d42657746db8761602356ab54e4a5e1d1cfab58fc873236eb6fa8bb35faae5b29e74345bc19552b212b1cafca641be
+  checksum: ff9c6912757378f80314ad42dc7f29d2a7d748d908ec04e81d4d6496475faf228c126400f4458bcfd2bd1d5dc4d28bd343047d6217079eafb4be150055fa2893
   languageName: node
   linkType: hard
 
-"@semaphore-protocol/proof@npm:3.7.0":
-  version: 3.7.0
-  resolution: "@semaphore-protocol/proof@npm:3.7.0"
+"@semaphore-protocol/proof@npm:3.8.0":
+  version: 3.8.0
+  resolution: "@semaphore-protocol/proof@npm:3.8.0"
   dependencies:
     "@ethersproject/bignumber": ^5.5.0
     "@ethersproject/bytes": ^5.7.0
@@ -4564,9 +4564,9 @@ __metadata:
     "@zk-kit/incremental-merkle-tree": 0.4.3
     snarkjs: 0.4.13
   peerDependencies:
-    "@semaphore-protocol/group": 3.7.0
-    "@semaphore-protocol/identity": 3.7.0
-  checksum: 20f0a411953c7b3eccfbc1240489a9d73a549c6931af11aa130ab54383a10601553c87198d9552e434efe0ea09a109056e06f32661870df63a0bf29b0904287a
+    "@semaphore-protocol/group": 3.8.0
+    "@semaphore-protocol/identity": 3.8.0
+  checksum: 78b2781af480574cefdaa55b5ccf4929fa6d408e90225ad8e4798d5839098e9ea676bc937a669dc8ebd355a0447cbafd3d3c4ae70c61d760c90c31388b76aa11
   languageName: node
   linkType: hard
 
@@ -9417,10 +9417,10 @@ __metadata:
     "@nomiclabs/hardhat-ethers": ^2.0.0
     "@nomiclabs/hardhat-waffle": ^2.0.0
     "@openzeppelin/contracts": 4.8.1
-    "@semaphore-protocol/group": 3.7.0
-    "@semaphore-protocol/hardhat": 3.7.0
-    "@semaphore-protocol/identity": 3.7.0
-    "@semaphore-protocol/proof": 3.7.0
+    "@semaphore-protocol/group": 3.8.0
+    "@semaphore-protocol/hardhat": 3.8.0
+    "@semaphore-protocol/identity": 3.8.0
+    "@semaphore-protocol/proof": 3.8.0
     "@typechain/ethers-v5": ^10.0.0
     "@typechain/hardhat": ^6.0.0
     "@types/chai": ^4.3.1
@@ -23196,9 +23196,9 @@ __metadata:
     "@emotion/styled": ^11.10.5
     "@fontsource/inter": ^4.5.14
     "@rainbow-me/rainbowkit": ^0.11.0
-    "@semaphore-protocol/group": 3.7.0
-    "@semaphore-protocol/identity": 3.7.0
-    "@semaphore-protocol/proof": 3.7.0
+    "@semaphore-protocol/group": 3.8.0
+    "@semaphore-protocol/identity": 3.8.0
+    "@semaphore-protocol/proof": 3.8.0
     "@types/react": 18.0.25
     "@types/react-dom": 18.0.8
     ethers: ^5.7.2
