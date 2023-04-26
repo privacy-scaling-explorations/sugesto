@@ -18,7 +18,7 @@ const connectors = connectorsForWallets([
         wallets: [
             injectedWallet({ chains }),
             metaMaskWallet({ chains }),
-            coinbaseWallet({ appName: "Zk Groups", chains }),
+            coinbaseWallet({ appName: "Bandada", chains }),
             walletConnectWallet({ chains })
         ]
     }
